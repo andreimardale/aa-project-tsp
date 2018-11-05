@@ -5,11 +5,13 @@ import utils.StdDraw;
 public class Point {
 	private double x; /* x coordonate of the point */
 	private double y; /* y coordonate of the point */
+	private final int index;
 	
 	/* Constructor */
-	public Point(double x, double y) {
+	public Point(double x, double y, int index) {
 		this.x = x;
 		this.y = y;
+		this.index = index;
 	}
 	
 	public double getX() {
@@ -35,7 +37,7 @@ public class Point {
 
 	@Override
 	public String toString() {
-		return String.format("%6.5f %6.5f", this.x, this.y);
+		return "[City " + index + "]-Position (" + String.format("%6.5f %6.5f", this.x, this.y) + ")";
 	}
 	
 	/* Draw this point with StdDraw library */

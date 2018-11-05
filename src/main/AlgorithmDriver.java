@@ -5,6 +5,7 @@ import java.util.List;
 import algorithms.AbstractTSP;
 import javafx.util.Pair;
 import model.Point;
+import utils.DrawingUtils;
 
 public class AlgorithmDriver {
 	private AbstractTSP strategy;
@@ -13,7 +14,14 @@ public class AlgorithmDriver {
 		this.strategy = strategy;
 	}
 
-	public Pair<List<Point>, Double> executeStrategy(List<Point> points) {
-		return strategy.execute(points);
+	public void executeStrategy(List<Point> points) {
+		strategy.execute(points);
+		double minimumCost = AbstractTSP.minimumCost;
+		List<Point> bestCircuit = AbstractTSP.bestCircuit;
+		
+		System.out.println("Best circuit has cost  " + minimumCost);
+		System.out.println(bestCircuit);
+		DrawingUtils.drawPointsOnMap(bestCircuit);
+
 	}
 }
