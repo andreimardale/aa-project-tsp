@@ -13,13 +13,13 @@ import model.Point;
  */
 public class DistanceDriver {
 
-    public DistanceDriver() {
-    }
-    //compute the euclidean distance between two points
-    public int EUCLIDEAN_2D(Point p1,Point p2)
-    {
-        double x_distance = p1.getX() - p2.getX();
-	double y_distance = p1.getY() - p2.getY();
-	return (int)Math.sqrt( x_distance * x_distance + y_distance * y_distance);
-    }
+	public DistanceDriver() {
+	}
+
+	// compute the euclidean distance between two points
+	public int EUCLIDEAN_2D(Point p1, Point p2) {
+		double x_distance = p1.getX() - p2.getX();
+		double y_distance = p1.getY() - p2.getY();
+		return (int) Math.sqrt(x_distance * x_distance + y_distance * y_distance);
+	}
 }

@@ -1,15 +1,17 @@
 package algorithms;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import model.Point;
+import model.TSPInput;
 
 public class BruteForceTSP extends AbstractTSP {
 	
 	@Override
-	public void execute(List<Point> points) {
-		generatePermutation(0, points);
+	public void execute(TSPInput tspInput) {
+		generatePermutation(0, tspInput.getPoints());
 	}
 
 	private void generatePermutation(int currentIndexOfExchange, List<Point> points) {
@@ -17,7 +19,7 @@ public class BruteForceTSP extends AbstractTSP {
 			double costOfTour = getCostOfTour(points);
 			if (costOfTour <= minimumCost) {
 				minimumCost = costOfTour;
-				bestCircuit = points;
+				bestCircuit = new ArrayList<>(points);
 			}
 		}
 		
@@ -38,6 +40,8 @@ public class BruteForceTSP extends AbstractTSP {
 		}
 		
 		total += points.get(points.size() - 1).distanceTo(points.get(0));
+		if (total == 8)
+			System.out.println();
 		
 		return total;
 	}

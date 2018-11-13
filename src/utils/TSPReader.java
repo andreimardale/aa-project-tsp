@@ -13,30 +13,37 @@ import model.TSPInput;
 
 
 public class TSPReader {
-    private String FILE_NAME;
-    private String EDGE_WEIGHT_TYPE="EDGE_WEIGHT_TYPE:";
-    private String DIMENSION="DIMENSION:";
+    private String fileName;
+    private static final String NAME = "NAME";
+    private static final String TYPE = "TYPE";
+    private static final String COMMENT = "COMMENT";
+    private static final String DIMENSION = "DIMENSION";
+    private static final String EDGE_WEIGHT_TYPE = "EDGE_WEIGHT_TYPE";
     
-    public TSPReader(String FILE_NAME) {
-        this.FILE_NAME=FILE_NAME;
+    public TSPReader(String fileName) {
+        this.fileName = fileName;
     }
-    /*reads from the desired input file and generate inputs
-    according to the iformation of the file*/
-    public TSPInput read()
-    {
-        TSPInput input=null;
+    
+    /* Reads from the desired input file and generate inputs according to the information of the file*/
+    public TSPInput read() {
+        TSPInput input = null;
+        BufferedReader reader = null;
+        
         try {
-            BufferedReader reader=new BufferedReader(new FileReader(new File(FILE_NAME)));
-            HashMap<String,String> information=new HashMap<>();
+        	reader = new BufferedReader(new FileReader(new File(fileName)));
+            HashMap<String, String> information = new HashMap<>();
             while(true) {
-                String line=reader.readLine();
-                String key=line.split(" ")[0];
-                if(key.equals("EDGE_WEIGHT_SECTION")||key.equals("NODE_COORD_SECTION"))
+                String line = reader.readLine();
+                String[] splittedLine = line.split(":");
+                
+                String key = splittedLine[0].trim();
+                if(key.equals("EDGE_WEIGHT_SECTION") || key.equals("NODE_COORD_SECTION"))
                     break;
-                String value=line.split(" ")[1];
+                String value = splittedLine[1].trim();
                 information.put(key, value);
             }
-            int number_of_nodes=Integer.parseInt(information.get(DIMENSION));
+            
+            int number_of_nodes = Integer.parseInt(information.get(DIMENSION));
             String method_to_calc_distance=information.get(EDGE_WEIGHT_TYPE);
             switch (method_to_calc_distance) {
                 case "EUC_2D": {
@@ -48,7 +55,22 @@ public class TSPReader {
                         double y_coord = Double.parseDouble(line.split(" ")[2]);
                         input_points.add(new Point(x_coord, y_coord, index));
                     }
-                    input = new TSPInput(input_points, method_to_calc_distance);
+                    input = new TSPInput(information.get(NAME), information.get(TYPE),
+                    		information.get(COMMENT), Integer.parseInt(information.get(DIMENSION)), information.get(EDGE_WEIGHT_TYPE), input_points);
+                    break;
+                }
+                case "EXPLICIT": {
+                	int[][] dist = new int[number_of_nodes][number_of_nodes];
+                	for (int i = 0; i < number_of_nodes; i++) {
+                		String line = reader.readLine();
+                		String[] splittedLine = line.split("\\s+");
+                		
+                		for (int j = 0; j < number_of_nodes; j++) {
+                			dist[i][j] = Integer.parseInt(splittedLine[j]);
+                		}
+                	}
+                    input = new TSPInput(information.get(NAME), information.get(TYPE),
+                    		information.get(COMMENT), Integer.parseInt(information.get(DIMENSION)), information.get(EDGE_WEIGHT_TYPE), dist);
                     break;
                 }
                 case "EUC_3D": {
@@ -59,9 +81,12 @@ public class TSPReader {
                     break;
                 }
             }
+            
+            reader.close();
         } catch (Exception ex) {
             Logger.getLogger(TSPReader.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
         return input;
     }
 }

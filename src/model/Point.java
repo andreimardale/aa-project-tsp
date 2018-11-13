@@ -3,8 +3,8 @@ package model;
 import utils.StdDraw;
 
 public class Point {
-	private double x; /* x coordonate of the point */
-	private double y; /* y coordonate of the point */
+	private double x; /* x coordinate of the point */
+	private double y; /* y coordinate of the point */
 	private final int index;
 	
 	/* Constructor */
