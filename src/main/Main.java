@@ -26,8 +26,8 @@ public class Main {
 
 		
 		
-		AlgorithmDriver driver = new AlgorithmDriver(new BruteForceTSP());
-		driver.executeStrategy(TEST_POINTS);
+//		AlgorithmDriver driver = new AlgorithmDriver(new BruteForceTSP());
+//		driver.executeStrategy(TEST_POINTS);
 		
 //		driver = new AlgorithmDriver(new BranchAndBoundTSP());
 //		driver = new AlgorithmDriver(new NearestNeighbourTSP());
