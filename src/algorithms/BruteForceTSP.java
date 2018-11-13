@@ -11,39 +11,43 @@ public class BruteForceTSP extends AbstractTSP {
 	
 	@Override
 	public void execute(TSPInput tspInput) {
-		generatePermutation(0, tspInput.getPoints());
+		List<Integer> listOfCityIndexes = getListOfCityIndexes(tspInput.getDimension());
+		generatePermutation(0, listOfCityIndexes);
 	}
 
-	private void generatePermutation(int currentIndexOfExchange, List<Point> points) {
-		if (currentIndexOfExchange == points.size()) {
-			double costOfTour = getCostOfTour(points);
+	private void generatePermutation(int currentIndexOfExchange, List<Integer> listOfCityIndexes) {
+		if (currentIndexOfExchange == listOfCityIndexes.size()) {
+			double costOfTour = getCostOfTour(listOfCityIndexes);
 			if (costOfTour <= minimumCost) {
 				minimumCost = costOfTour;
-				bestCircuit = new ArrayList<>(points);
+				bestCircuit = new ArrayList<>(listOfCityIndexes);
 			}
 		}
 		
-		for (int i = currentIndexOfExchange; i < points.size(); i++) {
-			Collections.swap(points, currentIndexOfExchange, i);
-			generatePermutation(currentIndexOfExchange + 1, points);
-			Collections.swap(points, i, currentIndexOfExchange);
+		for (int i = currentIndexOfExchange; i < listOfCityIndexes.size(); i++) {
+			Collections.swap(listOfCityIndexes, currentIndexOfExchange, i);
+			generatePermutation(currentIndexOfExchange + 1, listOfCityIndexes);
+			Collections.swap(listOfCityIndexes, i, currentIndexOfExchange);
 		}
 	}
 	
-	private double getCostOfTour(List<Point> points) {
+	private double getCostOfTour(List<Integer> points) {
 		double total = 0;
 		for (int i = 0; i < points.size() - 1; i++) {
-			Point sourcePoint = points.get(i);
-			Point destinationPoint = points.get(i + 1);
-			
-			total += sourcePoint.distanceTo(destinationPoint);
+			total += DISTANCES[i][i+1];
 		}
 		
-		total += points.get(points.size() - 1).distanceTo(points.get(0));
-		if (total == 8)
-			System.out.println();
+		total += DISTANCES[points.size() - 1][0];
 		
 		return total;
+	}
+	
+	private List<Integer> getListOfCityIndexes(int noOfCities) {
+		List<Integer> listOFCityIndexes = new ArrayList<>(noOfCities);
+		for (int i = 0; i < noOfCities; i++)
+			listOFCityIndexes.set(i, i);
+		
+		return listOFCityIndexes;
 	}
 	
 }

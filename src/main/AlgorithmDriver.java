@@ -16,9 +16,10 @@ public class AlgorithmDriver {
 	}
 
 	public void executeStrategy(TSPInput tspInput) {
+		AbstractTSP.DISTANCES = tspInput.getDist();
 		strategy.execute(tspInput);
 		double minimumCost = AbstractTSP.minimumCost;
-		List<Point> bestCircuit = AbstractTSP.bestCircuit;
+		List<Integer> bestCircuit = AbstractTSP.bestCircuit;
 		
 		System.out.println("Best circuit has cost  " + minimumCost);
 		System.out.println(bestCircuit);

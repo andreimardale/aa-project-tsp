@@ -40,6 +40,7 @@ public class Point {
 		return "[City " + index + "]-Position (" + String.format("%6.5f %6.5f", this.x, this.y) + ")";
 	}
 	
+	
 	/* Draw this point with StdDraw library */
 	public void draw() {
 		StdDraw.point(this.x, this.y);

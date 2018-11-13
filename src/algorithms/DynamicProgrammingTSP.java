@@ -39,7 +39,7 @@ public class DynamicProgrammingTSP extends AbstractTSP {
 	
 	@Override
 	public void execute(TSPInput tspInput) {
-		int[][] dist = tspInput.getDist() != null ? tspInput.getDist() : tspInput.generate_adjancency_matrix();
+		int[][] dist = tspInput.getDist();
 		int n = tspInput.getDimension();
 		
 		Map<Pair, Integer> C = new HashMap<>();
