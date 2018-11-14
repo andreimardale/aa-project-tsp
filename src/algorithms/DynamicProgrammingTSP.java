@@ -15,27 +15,6 @@ import model.TSPInput;
 public class DynamicProgrammingTSP extends AbstractTSP {
 
 	public static final int INFINITY = 9999999;
-	int n = 4;
-//	public static final int dist[][] = {
-//			{0, 10, 15, 20},
-//			{10, 0, 35, 25},
-//			{15, 35, 0, 30},
-//			{20, 25, 30, 0}
-//			};
-	
-	public static final int dist[][] = {
-			{0, 2, 9, 10},
-			{1, 0, 6, 4},
-			{15, 7, 0, 8},
-			{6, 3, 12, 0}
-			};
-	
-//	public static final int dist[][] = {
-//			{0, 1, 15, 6},
-//			{2, 0, 7, 3},
-//			{9, 6, 0, 12},
-//			{10, 4, 8, 0}
-//			};
 	
 	@Override
 	public void execute(TSPInput tspInput) {
@@ -47,16 +26,16 @@ public class DynamicProgrammingTSP extends AbstractTSP {
 		
 		Map<Integer, List<Set<Integer>>> allSubSets = generateAllSubSets(n);
 
-		C.put(new Pair(new HashSet<Integer>(Arrays.asList(1)), 1), 0);
-		parents.put(new Pair(new HashSet<Integer>(Arrays.asList(1)), 1), 1);
+		C.put(new Pair(new HashSet<Integer>(Arrays.asList(0)), 0), 0);
+		parents.put(new Pair(new HashSet<Integer>(Arrays.asList(0)), 0), 0);
 	
 		for (int s = 2; s <= n; s++) {
 			List<Set<Integer>> listOfSubsetsOfSizeS = allSubSets.get(s);
 			for (Set<Integer> S : listOfSubsetsOfSizeS) {
-				C.put(new Pair(S, 1), INFINITY);
+				C.put(new Pair(S, 0), INFINITY);
 				
 				for (Integer j : S) {
-					if (j == 1)
+					if (j == 0)
 						continue;
 					
 					int minValue = INFINITY;
@@ -68,7 +47,7 @@ public class DynamicProgrammingTSP extends AbstractTSP {
 						
 						Set<Integer> tempS = new HashSet<>(S);
 						tempS.remove(j);
-						int crt = C.get(new Pair(tempS, i)) + dist[i-1][j-1];
+						int crt = C.get(new Pair(tempS, i)) + dist[i][j];
 						if (crt < minValue) {
 							minValue = crt;
 							parent = i;
@@ -87,16 +66,17 @@ public class DynamicProgrammingTSP extends AbstractTSP {
 			if (entry.getKey().S.size() != n)
 				continue;
 			
-			if ((entry.getValue() + dist[entry.getKey().currentNode-1][0]) < minDist) {
-				minDist = (entry.getValue() + dist[entry.getKey().currentNode-1][0]);
+			if ((entry.getValue() + dist[entry.getKey().currentNode][0]) < minDist) {
+				minDist = (entry.getValue() + dist[entry.getKey().currentNode][0]);
 				lastPair = entry.getKey();
 			}
 		
 		}
 		
 		List<Integer> tour = getTour(lastPair, parents);
-		System.out.println(minDist);
-		System.out.println(tour);
+		
+		setMinimumCost(minDist);
+		setBestCircuit(tour);
 	}
 	
 	public List<Integer> getTour(Pair lastPair, Map<Pair, Integer> parents) {
@@ -126,15 +106,14 @@ public class DynamicProgrammingTSP extends AbstractTSP {
 		for (int i = 0; i < numberOfSubsets; i++) {
 			Set<Integer> subset = new HashSet<>();
 
-			/* if this subset won't contain 1, just skip it */
+			/* if this subset won't contain 0, just skip it */
 			if ((i & (1 << 0)) == 0) {
 				continue;
 			}
 			
 			for (int j = 0; j < n; j++) {
-				
 				if ((i & (1 << j)) != 0) {
-					subset.add(j+1);
+					subset.add(j);
 				}
 			}
 			allSubsets.computeIfAbsent(subset.size(), k -> new ArrayList<>()).add(subset);

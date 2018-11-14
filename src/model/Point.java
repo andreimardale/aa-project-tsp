@@ -26,15 +26,10 @@ public class Point {
 	public void setY(double y) {
 		this.y = y;
 	}
-	
-	/* Compute the 2D Euclidian Distance between destPoint and current point*/
-	public double distanceTo(Point destPoint) {
-		double xDistance = destPoint.getX() - this.x;
-		double yDistance = destPoint.getY() - this.y;
-		
-		return Math.sqrt( xDistance * xDistance + yDistance * yDistance);
+	public int getIndex() {
+		return index;
 	}
-
+	
 	@Override
 	public String toString() {
 		return "[City " + index + "]-Position (" + String.format("%6.5f %6.5f", this.x, this.y) + ")";

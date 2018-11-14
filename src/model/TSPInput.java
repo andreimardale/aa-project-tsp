@@ -1,17 +1,13 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package model;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 import utils.DistanceDriver;
 
-/**
- *
- * @author aliha
- */
 public class TSPInput {
 
 	private String name;
@@ -22,16 +18,18 @@ public class TSPInput {
 	private String edgeWeightType;
 
 	private int[][] dist;
+	private List<Integer> cityIndexes;
 
-	public TSPInput(String name, String type, String comment, int dimension, String edgeWeightType,
-			List<Point> points) {
+	public TSPInput(String name, String type, String comment, int dimension, String edgeWeightType,	List<Point> points) {
 		this(name, type, comment, dimension, edgeWeightType);
 		this.dist = generateAdjancencyMatrix(points);
+		this.cityIndexes = computeCityIndexes(points);
 	}
 
 	public TSPInput(String name, String type, String comment, int dimension, String edgeWeightType, int[][] dist) {
 		this(name, type, comment, dimension, edgeWeightType);
 		this.dist = dist;
+		this.cityIndexes = computeCityIndexes(dist);
 	}
 
 	public TSPInput(String name, String type, String comment, int dimension, String edgeWeightType) {
@@ -42,6 +40,23 @@ public class TSPInput {
 		this.dimension = dimension;
 		this.edgeWeightType = edgeWeightType;
 	}
+	
+	private List<Integer> computeCityIndexes(List<Point> points) {
+		List<Integer> cityIndexes = points.stream().map(point -> point.getIndex()).collect(Collectors.toList());
+		Optional<Integer> min = cityIndexes.stream().min(Comparator.naturalOrder());
+		if (min.isPresent() && min.get() != 0)
+			cityIndexes = cityIndexes.stream().map(index -> index - min.get()).collect(Collectors.toList());
+		
+		return cityIndexes;
+	}
+	
+	private List<Integer> computeCityIndexes(int[][] dist) {
+		List<Integer> cityIndexes = new ArrayList<>();
+		for (int i = 0; i < dist.length; i++)
+			cityIndexes.add(i);
+		
+		return cityIndexes;
+	}
 
 	/* Generate distances according to the edge weight type using the Distance Driver */
 	private int[][] generateAdjancencyMatrix(List<Point> points) {
@@ -50,11 +65,14 @@ public class TSPInput {
 		for (int i = 0; i < points.size(); i++) {
 			for (int j = i + 1; j < points.size(); j++) {
 				switch (edgeWeightType) {
-				case "EUC_2D": {
-					int dist = driver.EUCLIDEAN_2D(points.get(i), points.get(j));
+				case "EUC_2D":
+					int dist = driver.euclidian2Distance(points.get(i), points.get(j));
 					result[i][j] = dist;
 					result[j][i] = dist;
-				}
+					break;
+
+				default:
+					break;
 				}
 			}
 		}
@@ -118,4 +136,7 @@ public class TSPInput {
 		this.dist = dist;
 	}
 
+	public List<Integer> getCityIndexes() {
+		return cityIndexes;
+	}
 }
