@@ -6,6 +6,7 @@ import java.util.List;
 import algorithms.BranchAndBoundTSP;
 import algorithms.BruteForceTSP;
 import algorithms.DynamicProgrammingTSP;
+import algorithms.MinimumSpanningTreeTSP;
 import model.Point;
 import model.TSPInput;
 import utils.TSPReader;
@@ -63,6 +64,8 @@ public class Main {
 		driver2 = new AlgorithmDriver(new BranchAndBoundTSP());
 		driver2.executeStrategy(tspInput2);
 		
+		driver2 = new AlgorithmDriver(new MinimumSpanningTreeTSP());
+		driver2.executeStrategy(tspInput2);
 	}
 
 	
