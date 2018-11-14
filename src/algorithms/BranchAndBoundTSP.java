@@ -1,7 +1,6 @@
 package algorithms;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import model.Point;
 import model.TSPInput;
@@ -10,7 +9,6 @@ public class BranchAndBoundTSP extends AbstractTSP {
 
     //what will be the output if its an adjancency matrix???
     int[][] adjacencyMatrix;
-    List<Point> pointsToAnalyze;
 
     @Override
     public void execute(TSPInput input) {

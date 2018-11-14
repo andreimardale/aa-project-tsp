@@ -3,7 +3,6 @@ package algorithms;
 import java.util.ArrayList;
 import java.util.List;
 
-import model.Point;
 import model.TSPInput;
 
 public abstract class AbstractTSP {
@@ -34,7 +33,7 @@ public abstract class AbstractTSP {
 	public static void setBestCircuit(int[] bestCircuit) {
 		AbstractTSP.bestCircuit = new ArrayList<>();
 		for (int i : bestCircuit) {
-			AbstractTSP.bestCircuit.add(bestCircuit[i]);
+			AbstractTSP.bestCircuit.add(i);
 		}
 	}
 

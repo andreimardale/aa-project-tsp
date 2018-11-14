@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import model.Point;
 import model.TSPInput;
 
 public class DynamicProgrammingTSP extends AbstractTSP {

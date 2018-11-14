@@ -4,10 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import algorithms.AbstractTSP;
-import javafx.util.Pair;
-import model.Point;
 import model.TSPInput;
-import utils.DrawingUtils;
 
 public class AlgorithmDriver {
 	private AbstractTSP strategy;
