@@ -3,6 +3,7 @@ package algorithms;
 import static algorithms.AbstractTSP.bestCircuit;
 import static algorithms.AbstractTSP.minimumCost;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import model.Point;
 import model.TSPInput;
@@ -16,12 +17,10 @@ public class BranchAndBoundTSP extends AbstractTSP {
     @Override
     public void execute(TSPInput input) {
         
-        List<Point> points = input.getPoints();
-        adjacencyMatrix = input.generate_adjancency_matrix();
-        pointsToAnalyze = points;
-        minimumCost = getFirstSolution(points);
-        printMatrix(adjacencyMatrix);
-        System.out.println("1st minimum: "+minimumCost);
+        adjacencyMatrix = input.getDist();
+        minimumCost = Integer.MAX_VALUE;
+//        printMatrix(adjacencyMatrix);
+
         int[] array = new int[1];
         array[0] = 0;
         double predictedCost = getPredictedCost(array);
@@ -29,24 +28,6 @@ public class BranchAndBoundTSP extends AbstractTSP {
         branchAndBound(root);
     }
 
-    public double[][] generateMatrix(List<Point> points) {
-        double[][] adjancencyMatrix = new double[points.size()][points.size()];
-        for (int i = 0; i < points.size(); i++) {
-            for (int j = 0; j < points.size(); j++) {
-                adjancencyMatrix[i][j] = points.get(i).distanceTo(points.get(j));
-            }
-        }
-        return adjancencyMatrix;
-    }
-
-    public double getFirstSolution(List<Point> points) {
-        double cost = 0;
-        for (int i = 0; i < points.size() - 1; i++) {
-            cost += points.get(i).distanceTo(points.get(i + 1));
-        }
-        cost += points.get(points.size() - 1).distanceTo(points.get(0));
-        return cost;
-    }
 
     public void branchAndBound(TreeNodeInBranchAndBound node) {
         //System.out.println(node.toString());
@@ -67,13 +48,13 @@ public class BranchAndBoundTSP extends AbstractTSP {
                         double costFunction = instantCost + predictedCost;
                         child = new TreeNodeInBranchAndBound(instantCost, predictedCost, cities);
                         insertSorted(child, node.getChilds());
-                        //to do: add child to the array list of childs and keep it sorted
                     }
                 }
                 for (int i = 0; i < node.getChilds().size(); i++) {
                     branchAndBound(node.getChilds().get(i));
                 }
-            } else if (node.getCities().length == adjacencyMatrix.length) //there is 1 step to reach the leaf
+            } 
+            else if (node.getCities().length == adjacencyMatrix.length) //there is 1 step to reach the leaf
             {
                 int[] nodeCities = node.getCities();
                 double instantCost = node.getInstantCost() + adjacencyMatrix[nodeCities[nodeCities.length - 1]][nodeCities[0]];
@@ -90,10 +71,20 @@ public class BranchAndBoundTSP extends AbstractTSP {
                 if (node.getCostFunction() < minimumCost) 
                 {
                     minimumCost = node.getCostFunction();
-                    bestCircuit = sortPointsWithRespectToNode(node.getCities(), pointsToAnalyze);
+                    bestCircuit=arrayToList(node.getCities());
                 }
             }
         }
+    }
+    
+    public ArrayList<Integer> arrayToList(int [] array)
+    {
+        ArrayList<Integer> arrayList=new ArrayList<>();
+        for(int i=0;i<array.length;i++)
+        {
+            arrayList.add(array[i]);
+        }
+        return arrayList;
     }
 
     public void printArray(int array[]) 
@@ -122,7 +113,7 @@ public class BranchAndBoundTSP extends AbstractTSP {
         {
             for (int j = 0; j < matrix[0].length; j++) 
             {
-                System.out.print(String.format("%.2f", matrix[i][j]) + "\t");
+                System.out.print(matrix[i][j]+" ");
             }
             System.out.println();
         }
@@ -152,19 +143,17 @@ public class BranchAndBoundTSP extends AbstractTSP {
                 }
             }
         }
-        //System.out.println("\nNew Matrix: ");
-        //printMatrix(newMatrix);
         for (int i = 0; i < newMatrix.length; i++) 
         {
-            double minimumInARow = Double.MAX_VALUE;
+            double minimumInARow = Integer.MAX_VALUE;
             for (int j = 0; j < newMatrix[i].length; j++) 
             {
-                if (newMatrix[i][j] < minimumInARow && i != j && newMatrix[i][j] != Double.MAX_VALUE) 
+                if (newMatrix[i][j] < minimumInARow && i != j && newMatrix[i][j] != Integer.MAX_VALUE) 
                 {
                     minimumInARow = newMatrix[i][j];
                 }
             }
-            if (minimumInARow != Double.MAX_VALUE) 
+            if (minimumInARow != Integer.MAX_VALUE) 
             {
                 predictedCost += minimumInARow;
             }
