@@ -12,14 +12,14 @@ import java.util.ArrayList;
  * @author My pc
  */
 public class TreeNodeInBranchAndBound {
-    private double instantCost; //the cost of the linked branches
-    private double predictedCost; //cost of the minimum of other edges
-    private double costFunction; //instantCost + predictedCost
+    private int instantCost; //the cost of the linked branches
+    private int predictedCost; //cost of the minimum of other edges
+    private int costFunction; //instantCost + predictedCost
     //
     int [] cities;
     ArrayList<TreeNodeInBranchAndBound> childs;
 
-    public TreeNodeInBranchAndBound(double instantCost,double predictedCost, int [] cities) {
+    public TreeNodeInBranchAndBound(int instantCost,int predictedCost, int [] cities) {
         this.predictedCost = predictedCost;
         this.instantCost=instantCost;
         this.costFunction=predictedCost+instantCost;
@@ -27,15 +27,15 @@ public class TreeNodeInBranchAndBound {
         childs=new ArrayList<>();
     }
 
-    public double getInstantCost() {
+    public int getInstantCost() {
         return instantCost;
     }
 
-    public double getPredictedCost() {
+    public int getPredictedCost() {
         return predictedCost;
     }
 
-    public double getCostFunction() {
+    public int getCostFunction() {
         return instantCost+predictedCost;
     }
 

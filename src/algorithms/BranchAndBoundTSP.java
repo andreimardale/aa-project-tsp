@@ -1,7 +1,5 @@
 package algorithms;
 
-import static algorithms.AbstractTSP.bestCircuit;
-import static algorithms.AbstractTSP.minimumCost;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -18,12 +16,11 @@ public class BranchAndBoundTSP extends AbstractTSP {
     public void execute(TSPInput input) {
         
         adjacencyMatrix = input.getDist();
-        minimumCost = Integer.MAX_VALUE;
 //        printMatrix(adjacencyMatrix);
 
         int[] array = new int[1];
         array[0] = 0;
-        double predictedCost = getPredictedCost(array);
+        int predictedCost = getPredictedCost(array);
         TreeNodeInBranchAndBound root = new TreeNodeInBranchAndBound(0, predictedCost, array);
         branchAndBound(root);
     }
@@ -31,7 +28,7 @@ public class BranchAndBoundTSP extends AbstractTSP {
 
     public void branchAndBound(TreeNodeInBranchAndBound node) {
         //System.out.println(node.toString());
-        if (node.getCostFunction() < minimumCost) 
+        if (node.getCostFunction() < getMinimumCost()) 
         {
             TreeNodeInBranchAndBound child;
             //System.out.println("First minimum cost: "+minimumCost);
@@ -40,12 +37,12 @@ public class BranchAndBoundTSP extends AbstractTSP {
                 {
                     if (!(isInArray(node.getCities(), i))) 
                     {
-                        double instantCost = node.getInstantCost() + adjacencyMatrix[node.getCities()[node.getCities().length - 1]][i];
+                    	int instantCost = node.getInstantCost() + adjacencyMatrix[node.getCities()[node.getCities().length - 1]][i];
                         int[] cities = new int[node.getCities().length + 1];
                         System.arraycopy(node.getCities(), 0, cities, 0, node.getCities().length);
                         cities[node.getCities().length] = i;
-                        double predictedCost = getPredictedCost(cities);
-                        double costFunction = instantCost + predictedCost;
+                        int predictedCost = getPredictedCost(cities);
+                        int costFunction = instantCost + predictedCost;
                         child = new TreeNodeInBranchAndBound(instantCost, predictedCost, cities);
                         insertSorted(child, node.getChilds());
                     }
@@ -57,21 +54,21 @@ public class BranchAndBoundTSP extends AbstractTSP {
             else if (node.getCities().length == adjacencyMatrix.length) //there is 1 step to reach the leaf
             {
                 int[] nodeCities = node.getCities();
-                double instantCost = node.getInstantCost() + adjacencyMatrix[nodeCities[nodeCities.length - 1]][nodeCities[0]];
+                int instantCost = node.getInstantCost() + adjacencyMatrix[nodeCities[nodeCities.length - 1]][nodeCities[0]];
                 int[] cities = new int[nodeCities.length + 1];
                 System.arraycopy(nodeCities, 0, cities, 0, nodeCities.length);
                 cities[cities.length - 1] = nodeCities[0];  //put the last element as the first cause cycle
-                double predictedCost = getPredictedCost(cities); //will be 0 since the cities are complete
-                double costFunction = instantCost + predictedCost;
+                int predictedCost = getPredictedCost(cities); //will be 0 since the cities are complete
+                int costFunction = instantCost + predictedCost;
                 child = new TreeNodeInBranchAndBound(instantCost, predictedCost, cities);
                 branchAndBound(child);
             } 
             else //number of cities in the array is more than the number of cities (leaf of the tree)
             {
-                if (node.getCostFunction() < minimumCost) 
+                if (node.getCostFunction() < getMinimumCost()) 
                 {
-                    minimumCost = node.getCostFunction();
-                    bestCircuit=arrayToList(node.getCities());
+                	setMinimumCost(node.getCostFunction());
+                	setBestCircuit(node.getCities());
                 }
             }
         }
@@ -119,10 +116,10 @@ public class BranchAndBoundTSP extends AbstractTSP {
         }
     }
 
-    private double getPredictedCost(int[] cities) 
+    private int getPredictedCost(int[] cities) 
     {
         int[][] newMatrix = copyMatrix(adjacencyMatrix); //to modify the values freely
-        double predictedCost = 0;
+        int predictedCost = 0;
         if (cities.length > 1) 
         {
             for (int k = 0; k < cities.length; k++) 
@@ -145,7 +142,7 @@ public class BranchAndBoundTSP extends AbstractTSP {
         }
         for (int i = 0; i < newMatrix.length; i++) 
         {
-            double minimumInARow = Integer.MAX_VALUE;
+        	int minimumInARow = Integer.MAX_VALUE;
             for (int j = 0; j < newMatrix[i].length; j++) 
             {
                 if (newMatrix[i][j] < minimumInARow && i != j && newMatrix[i][j] != Integer.MAX_VALUE) 

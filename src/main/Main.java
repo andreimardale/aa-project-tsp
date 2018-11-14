@@ -6,11 +6,8 @@ import java.util.List;
 import algorithms.BranchAndBoundTSP;
 import algorithms.BruteForceTSP;
 import algorithms.DynamicProgrammingTSP;
-import algorithms.NearestNeighbourTSP;
 import model.Point;
 import model.TSPInput;
-import utils.DrawingUtils;
-import utils.StdDraw;
 import utils.TSPReader;
 
 public class Main {
@@ -43,23 +40,29 @@ public class Main {
 	public static void main(String[] args) {
 
 		/* Examples of how to use the reading from file infrastructure */
-		TSPReader tspReader = new TSPReader("hm10.tsp");
-		TSPInput tspInput = tspReader.read();
+//		TSPReader tspReader = new TSPReader("hm10.tsp");
+//		TSPInput tspInput = tspReader.read();
+//
+//		AlgorithmDriver driver = new AlgorithmDriver(new DynamicProgrammingTSP());
+//		driver.executeStrategy(tspInput);
+//		
+//		driver = new AlgorithmDriver(new BruteForceTSP());
+//		driver.executeStrategy(tspInput);
+//		
+//		driver = new AlgorithmDriver(new BranchAndBoundTSP());
+//		driver.executeStrategy(tspInput);
 
-		AlgorithmDriver driver = new AlgorithmDriver(new DynamicProgrammingTSP());
-		driver.executeStrategy(tspInput);
-		
-		driver = new AlgorithmDriver(new BruteForceTSP());
-		driver.executeStrategy(tspInput);
-
-		/* Examples of how to use a hardcoded a graph */
-		TSPInput tspInput2 = new TSPInput("Test Case 1", "TSP", "This is my example test case.", TEST_POINTS.size(), "EUC_2D", TEST_POINTS);
+//		/* Examples of how to use a hardcoded a graph */
+		TSPInput tspInput2 = new TSPInput("Test Case 1", "TSP", "This is my example test case.", dist1.length, "EUC_2D", dist1);
 		AlgorithmDriver driver2 = new AlgorithmDriver(new BruteForceTSP());
 		driver2.executeStrategy(tspInput2);
 	
 		driver2 = new AlgorithmDriver(new DynamicProgrammingTSP());
 		driver2.executeStrategy(tspInput2);
-	
+
+		driver2 = new AlgorithmDriver(new BranchAndBoundTSP());
+		driver2.executeStrategy(tspInput2);
+		
 	}
 
 	

@@ -30,6 +30,13 @@ public abstract class AbstractTSP {
 	public static void setBestCircuit(List<Integer> bestCircuit) {
 		AbstractTSP.bestCircuit = new ArrayList<>(bestCircuit);
 	}
+	
+	public static void setBestCircuit(int[] bestCircuit) {
+		AbstractTSP.bestCircuit = new ArrayList<>();
+		for (int i : bestCircuit) {
+			AbstractTSP.bestCircuit.add(bestCircuit[i]);
+		}
+	}
 
 	
 
