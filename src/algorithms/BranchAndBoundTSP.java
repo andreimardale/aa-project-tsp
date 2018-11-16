@@ -100,7 +100,7 @@ public class BranchAndBoundTSP extends AbstractTSP {
             }
         }
         return false;
-    }
+    } 
 
     public void printMatrix(int[][] matrix) 
     {
