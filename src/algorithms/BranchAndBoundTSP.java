@@ -118,29 +118,35 @@ public class BranchAndBoundTSP extends AbstractTSP {
     {
         int[][] newMatrix = copyMatrix(adjacencyMatrix); //to modify the values freely
         int predictedCost = 0;
+//check if the cities are more than 1 in order to start canceling the rows and columns that 
+//are already linked to each other
         if (cities.length > 1) 
         {
+//here we consider that if the array contains [1,2] then 1 could not go to any other city
+//because it already got 2 and no one could go to 2 because 1 already did so we should delete 
+//row 1 and column 2 only.
             for (int k = 0; k < cities.length; k++) 
             {
                 if (k != cities.length - 1 || k == 0) 
                 {
                     for (int i = 0; i < adjacencyMatrix.length; i++) 
                     {
-                        newMatrix[cities[k]][i] = Integer.MAX_VALUE;  //delete row of i
+                        newMatrix[cities[k]][i] = Integer.MAX_VALUE;  //like deleting row of i
                     }
                 }
                 if (k != 0) 
                 {
                     for (int j = 0; j < adjacencyMatrix[0].length; j++) 
                     {
-                        newMatrix[j][cities[k]] = Integer.MAX_VALUE;  //delete column of j
+                        newMatrix[j][cities[k]] = Integer.MAX_VALUE;  //like deleting column of j
                     }
                 }
             }
         }
+        //start choosing the minimums of each row
         for (int i = 0; i < newMatrix.length; i++) 
         {
-        	int minimumInARow = Integer.MAX_VALUE;
+            int minimumInARow = Integer.MAX_VALUE;
             for (int j = 0; j < newMatrix[i].length; j++) 
             {
                 if (newMatrix[i][j] < minimumInARow && i != j && newMatrix[i][j] != Integer.MAX_VALUE) 
@@ -148,6 +154,7 @@ public class BranchAndBoundTSP extends AbstractTSP {
                     minimumInARow = newMatrix[i][j];
                 }
             }
+            //check if the minimum chosed is a number different from what it's initiaized as
             if (minimumInARow != Integer.MAX_VALUE) 
             {
                 predictedCost += minimumInARow;
@@ -155,7 +162,8 @@ public class BranchAndBoundTSP extends AbstractTSP {
         }
         return predictedCost;
     }
-
+    
+    //returns a copy of a matrix
     public int[][] copyMatrix(int[][] matrix) 
     {
         int[][] newMatrix = new int[matrix.length][matrix[0].length];
@@ -167,6 +175,9 @@ public class BranchAndBoundTSP extends AbstractTSP {
         return newMatrix;
     }
 
+    //insert the node to an arrayList sorted with respect to the cost
+    //that's done to keep the less costed nodes on the left of the tree
+    //then most likely cutting more branches
     void insertSorted(TreeNodeInBranchAndBound node, ArrayList<TreeNodeInBranchAndBound> list) 
     {
         int i = 0;
@@ -177,14 +188,65 @@ public class BranchAndBoundTSP extends AbstractTSP {
         }
         list.add(i, node);
     }
+}
 
-    private List<Point> sortPointsWithRespectToNode(int[] array, List<Point> pointsToAnalyze) 
-    {
-        List<Point> sortedPoints = new ArrayList<>();
-        for (int i = 0; i < array.length; i++) {
-            sortedPoints.add(pointsToAnalyze.get(array[i]));
-        }
-        return sortedPoints;
+//A class to define the node of the tree. Each node will have the following:
+//1) cost of the linked cities: instantCost
+//2) cost of the heuristic function: predictedCost
+//3) the sum of the above 2: costFunction
+//4) an array of indexes, each which define a city. For intance if a node has [0,1,2] means that 0 
+//is connected to 1, and 1 is connected to 2
+//5) a list of child nodes
+
+class TreeNodeInBranchAndBound {
+    private int instantCost; //the cost of the linked branches
+    private int predictedCost; //cost of the minimum of other edges
+    private int costFunction; //instantCost + predictedCost
+    //
+    int [] cities;
+    ArrayList<TreeNodeInBranchAndBound> childs;
+
+    public TreeNodeInBranchAndBound(int instantCost,int predictedCost, int [] cities) {
+        this.predictedCost = predictedCost;
+        this.instantCost=instantCost;
+        this.costFunction=predictedCost+instantCost;
+        this.cities = cities;
+        childs=new ArrayList<>();
     }
 
+    public int getInstantCost() {
+        return instantCost;
+    }
+
+    public int getPredictedCost() {
+        return predictedCost;
+    }
+
+    public int getCostFunction() {
+        return instantCost+predictedCost;
+    }
+
+    public int [] getCities() {
+        return cities;
+    }
+
+    public ArrayList<TreeNodeInBranchAndBound> getChilds() {
+        return childs;
+    }
+    @Override
+    public String toString()
+    {
+        String s="";
+        s+= "This node has:\n InstantCost: "+getInstantCost()+
+                "\n PredictedCost:  "+getPredictedCost()+
+                "\n CostFunction: "+getCostFunction()+
+                "\n Cities: ";
+        for(int i=0;i<cities.length;i++)
+        {
+            s+=cities[i]+" ";
+        }
+        s+="\n";
+        return s;
+    }
 }
+
