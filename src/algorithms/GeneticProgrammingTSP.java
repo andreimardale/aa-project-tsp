@@ -35,7 +35,7 @@ public class GeneticProgrammingTSP extends AbstractTSP{
 		System.out.println("Minum tour after one evolution : "+min);
 		System.out.println("Fittest : "+pop.getFittest().getDistance());
 		*/
-		
+		/* we evovle the population to a limit in order to get new generations with better fittness */
 		for(int i=0;i<1000;i++) {
 			pop = evolvePopulation(pop);
 		}
@@ -44,38 +44,53 @@ public class GeneticProgrammingTSP extends AbstractTSP{
 	
 	}
 	boolean keep=true;
+	/*this function takes the old population and evolve a new population from it*/
 	public Population evolvePopulation(Population population) {
 		
 		Population newPopulation = new Population(population.getSize(),false);
 		int offset = 0;
+		/*we will keep the fittest child from the population before if keep = true */
 		if(keep) {
 			newPopulation.tours.add(0,population.getFittest());
 			offset = 1;
 		}
+		/*traverse the hole population and generate new children for the new population*/
+		
 		for(int i=offset;i<newPopulation.getSize() ; i++) {
+			/*get the two parents using the tournament function*/
 			
 			Tour parent_1 = tournament(population);
 			Tour parent_2 = tournament(population);
 			
+			/*make a child by performing a crossOver on the two parents*/
+			
 			Tour child = crossOver(parent_1,parent_2);
 			child.distance = child.getDistance();
+			/*add the new child to the  new population*/
 			newPopulation.tours.add(child);
 		}
-		
+		/* traverse the new population and do some mutations on its indviduals i.e TOURS */
 		for (int i = offset ; i < newPopulation.getSize() ; i++) {
 			mutate(newPopulation.tours.get(i));
 		}
 		return newPopulation;
 	}
+	
+	/* this function given a tour it mutate its genes which are the cities by swaping them */
+	
 	private void mutate(Tour tour) {
 		for (int i = 0; i < tour.cities.size() ; i++) {
+			/*take a random to decide if we are going to do a mutation according to the mutation rate */
 			if(Math.random() < mutationRate) {
+				/*get a random index from the cities */
 				int city2_position = (int) (Math.random() * tour.cities.size());
 				
+				/*get the two cities to swap them*/
 				int city1 = tour.cities.get(i);
 				int city2 = tour.cities.get(city2_position);
 				
 				//swap cities
+				/*put city1 in the position of city2 and vice versa */
 				
 				tour.cities.set(city2_position, city1);
 				tour.cities.set(i, city2);
@@ -83,8 +98,14 @@ public class GeneticProgrammingTSP extends AbstractTSP{
 			}
 		}
 	}
+	
+	/* this function given to parent tours it generates a child*/
+	
 	private Tour crossOver(Tour parent_1, Tour parent_2) {
+		/* initialize a new child having null cities */
 		Tour child = new Tour();
+		
+		/*get a random start and end index*/
 		
 		int startIndex = (int)(Math.random() * parent_1.cities.size());
 		int endIndex  = (int)(Math.random() * parent_1.cities.size());
@@ -99,6 +120,8 @@ public class GeneticProgrammingTSP extends AbstractTSP{
 
 			}
 			else if (startIndex > endIndex) {
+				/*we take the cities outside the start and end */
+				
 				if( i <= startIndex || i>=endIndex) {
 					child.cities.set(i,parent_1.cities.get(i));
 				}
@@ -116,6 +139,7 @@ public class GeneticProgrammingTSP extends AbstractTSP{
 				
 				for (int j = 0; j <child.cities.size(); j++) {
 					if(child.cities.get(j) == null) {
+						/* add the missing city in its right place */
 						child.cities.set(j,parent_2.cities.get(i));
 						break;
 					}
@@ -124,9 +148,14 @@ public class GeneticProgrammingTSP extends AbstractTSP{
 		}
 		return child;
 	}
+	/* this function make a tournament of a specific size defined above that could be tuned
+	, the winner of this tournament is the fittest tour i.e which have the minimum distance */
+	
 	private Tour tournament(Population population) {
 		Population tournament = new Population(tournamentSize, false);
 		for( int i = 0 ; i<tournamentSize ; i++) {
+			/*fill the tournament randomly from the population */
+			
 			int randId = (int) (Math.random() * population.getSize()); 
 			tournament.tours.add(i,population.tours.get(randId));
 		}
@@ -145,7 +174,7 @@ public class GeneticProgrammingTSP extends AbstractTSP{
 		}
 		
 		public void generateIndividual() {
-			
+			/*for the first initialization indviduals i.e tours are generated randomly using the shuffle function*/
 			for (int i = 0; i < input.getDimension() ; i++) {
 				cities.set(i,i);
 			}
@@ -157,7 +186,8 @@ public class GeneticProgrammingTSP extends AbstractTSP{
 				
 		}
 		public double getDistance() {
-				/*calculate distance of the tour*/
+				/*calculate distance of the tour from the begging city to the last city 
+				plus the last edge from the last city to the first one*/
 				
 				int tourDistance=0;
 				for(int i=0;i<cities.size();i++) { 
@@ -191,6 +221,8 @@ public class GeneticProgrammingTSP extends AbstractTSP{
 	    public Population(int popSize,boolean init) {
 			pop_size = popSize;
 	    	if (init) {
+			/*if init for first time we add the random generated individuals i.e tours
+			to the population using the generateIndividual() function defined in the Tour class*/
 				for (int i = 0; i < popSize; i++) {
 					Tour tour = new Tour();
 					tour.generateIndividual();
@@ -199,7 +231,10 @@ public class GeneticProgrammingTSP extends AbstractTSP{
 			}
 			
 	    }
+		/*this function gets the fittest tour i.e min distance which will be the answer at some point*/
+		
 	    public Tour getFittest() {
+		    
 	    	Tour fittestTour = tours.get(0);
 	    	for(Tour currentTour:tours) {
 	    		if(currentTour.getDistance() < fittestTour.getDistance()) {
