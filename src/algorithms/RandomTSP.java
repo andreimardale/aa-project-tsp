@@ -21,7 +21,7 @@ public class RandomTSP extends AbstractTSP{
         List<Integer> notVisited = new ArrayList<>(cityIndexes);
 
         int size = cityIndexes.size();
-        int currentCity = ThreadLocalRandom.current().nextInt(0, size);
+        int currentCity = ThreadLocalRandom.current().nextInt(0, size);;
         int firstCity = currentCity;
         getBestCircuit().add(currentCity);
         notVisited.remove(currentCity);
@@ -39,7 +39,7 @@ public class RandomTSP extends AbstractTSP{
             // divide each factor by the total cost and change to inverse to give edges with less cost higher probability
             double totalProbability = 0.0;
             for (int j = 0; j < probability.size(); j++) {
-                probability.set(j, 1 - probability.get(j)/totalCost);
+                probability.set(j, totalCost - probability.get(j));
                 totalProbability += probability.get(j);
             }
             // choose edge based on probability.
