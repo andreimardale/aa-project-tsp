@@ -151,7 +151,7 @@ public class MinimumSpanningTreeTSP extends AbstractTSP {
         for (int i = 0; i < input.getDimension() - 1; i++) {
             sum += input.getDist()[getBestCircuit().get(i)][getBestCircuit().get(i + 1)];
         }
-        sum += input.getDist()[getBestCircuit().get(input.getDimension() - 1)][0];
+        sum += input.getDist()[getBestCircuit().get(input.getDimension() - 1)][getBestCircuit().get(0)];
         setMinimumCost(sum);
     }
 
