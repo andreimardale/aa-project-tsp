@@ -60,8 +60,8 @@ public class Main {
 //		driver.executeStrategy(tspInput);
 
 //		/* Examples of how to use a hardcoded a graph */
-//		TSPInput tspInput2 = new TSPInput("Test Case 1", "TSP", "This is my example test case.", SMALL_TEST_POINTS.size(), "EUC_2D", SMALL_TEST_POINTS);
-		TSPInput tspInput3 = new TSPReader("eil76.tsp").read();
+//		TSPInput tspInput2 = new TSPInput("Test Case 1", "TSP", "This is my example test case.", dist4.length, "EUC_2D", dist4);
+		TSPInput tspInput3 = new TSPReader("berlin52.tsp").read();
 		AlgorithmDriver driver2 = new AlgorithmDriver(new AntColonyTSP());
 		driver2.executeStrategy(tspInput3);
 	
