@@ -63,7 +63,7 @@ public class TSPReader {
                 	int[][] dist = new int[number_of_nodes][number_of_nodes];
                 	for (int i = 0; i < number_of_nodes; i++) {
                 		String line = reader.readLine();
-                		String[] splittedLine = line.split("\\s+");
+                		String[] splittedLine = line.trim().split("\\s+");
                 		
                 		for (int j = 0; j < number_of_nodes; j++) {
                 			dist[i][j] = Integer.parseInt(splittedLine[j]);
