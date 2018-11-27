@@ -23,7 +23,7 @@ public class GeneticProgrammingTSP extends AbstractTSP{
 		
 		/* we evovle the population to a limit in order to get new generations with better fittness */
 		for(int i=0;i<1000;i++) {
-			pop = evolvePopulation(pop,NWOX_CROSS_OVER);
+			pop = evolvePopulation(pop,OX_CROSS_OVER);
 		}
 		Tour fittest_tour = pop.getFittest();
 		setMinimumCost((int)fittest_tour.getDistance());
@@ -107,6 +107,8 @@ public class GeneticProgrammingTSP extends AbstractTSP{
 			}
 		}
 	}
+	/*partially matched crossOver*/
+	
 	private Tour crossOver_PMX(Tour parent_1,Tour parent_2) {
 		Tour child = new Tour();
 		int startIndex = (int)(Math.random()*parent_1.cities.size());
