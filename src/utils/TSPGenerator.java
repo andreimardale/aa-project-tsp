@@ -84,16 +84,27 @@ public class TSPGenerator {
 		this.sparsity = sparsity;
 	}
 	
-	
 	public void generate() {
 		int[][] generateDistances = generateDistances();
 		String distances = generateDistancesAsString(generateDistances);
 		System.out.println(distances);
-	     
+		
+		StringBuilder result = new StringBuilder();
+		result.append("NAME: ").append(fileName).append('\n');
+		result.append("TYPE: ").append("TSP").append('\n');
+		result.append("COMMENT: ").append("Test case generated with custom generator!").append('\n');
+		result.append("DIMENSION: ").append(noOfCities).append('\n');
+		result.append("EDGE_WEIGHT_TYPE: ").append("EXPLICIT").append('\n');
+		result.append("EDGE_WEIGHT_FORMAT: ").append("FULL_MATRIX").append('\n');
+		result.append("DISPLAY_DATA_TYPE: ").append("TWOD_DISPLAY").append('\n');
+		result.append("EDGE_WEIGHT_SECTION").append('\n');
+		result.append(distances);
+
+		
 	    BufferedWriter writer;
 		try {
 			writer = new BufferedWriter(new FileWriter(fileName));
-			writer.write(distances);
+			writer.write(result.toString());
 		    writer.close();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -159,7 +170,7 @@ public class TSPGenerator {
 	}
 	
 	private String generateDistancesAsString(int[][] result) {
-		StringBuffer res = new StringBuffer();
+		StringBuilder res = new StringBuilder();
 		
 		for (int i = 0; i < result.length; i++) {
 			for (int j = 0; j < result.length; j++) {
