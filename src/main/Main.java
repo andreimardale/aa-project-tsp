@@ -6,6 +6,7 @@ import java.util.List;
 import algorithms.*;
 import model.Point;
 import model.TSPInput;
+import utils.TSPGenerator;
 import utils.TSPReader;
 
 public class Main {
@@ -46,6 +47,9 @@ public class Main {
 
 	public static void main(String[] args) {
 		
+		TSPGenerator generator = new TSPGenerator("test10.tsp", 5, true, 1, 5, "UNIFORM_DISTRIBUTION", 0.01);
+		generator.generate();
+		
 		/* Examples of how to use the reading from file infrastructure */
 //		TSPReader tspReader = new TSPReader("wi29.tsp");
 //		TSPInput tspInput = tspReader.read();
@@ -61,9 +65,9 @@ public class Main {
 
 //		/* Examples of how to use a hardcoded a graph */
 //		TSPInput tspInput2 = new TSPInput("Test Case 1", "TSP", "This is my example test case.", dist4.length, "EUC_2D", dist4);
-		TSPInput tspInput3 = new TSPReader("berlin52.tsp").read();
-		AlgorithmDriver driver2 = new AlgorithmDriver(new AntColonyTSP());
-		driver2.executeStrategy(tspInput3);
+//		TSPInput tspInput3 = new TSPReader("berlin52.tsp").read();
+//		AlgorithmDriver driver2 = new AlgorithmDriver(new AntColonyTSP());
+//		driver2.executeStrategy(tspInput3);
 	
 //		driver2 = new AlgorithmDriver(new DynamicProgrammingTSP());
 //		driver2.executeStrategy(tspInput2);

@@ -5,26 +5,49 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.graphstream.graph.Graph;
+import org.graphstream.graph.implementations.SingleGraph;
+
 public class Miscellanous {
 
 	public static void main(String[] args) {
 
-		List<Pair> pairs = new ArrayList<>();
-		Node n0 = new Node(0);
-		Node n1 = new Node(1);
-		Node n2 = new Node(2);
-		Node n3 = new Node(3);
-		Node n4 = new Node(4);
+		Graph graph = new SingleGraph("Tutorial 1");
+		
+//		org.graphstream.graph.Node nodeA = graph.addNode("A" );
+//		org.graphstream.graph.Node nodeB = graph.addNode("B" );
+//		org.graphstream.graph.Node nodeC = graph.addNode("C" );
+		for (int i = 0; i < 52; i++) {
+			graph.addNode(i + "");
+		}
+		
+		for (int i = 0; i < 51; i++) {
+			String crt = String.valueOf(i);
+			String next = String.valueOf(i+1);
+			
+			graph.addEdge(crt + "_" + next, crt, next);
+		}
+		
+		graph.addEdge("0_51", "0", "51");
 		
 		
-		pairs.add(new Pair(n3, n4));
-		pairs.add(new Pair(n1,n2));
-		pairs.add(new Pair(n2, n4));
-		pairs.add(new Pair(n0,n1));
 		
-		Node buildTree = buildTree(pairs);
-		preoder(buildTree);
-		System.out.println();
+//		List<Pair> pairs = new ArrayList<>();
+//		Node n0 = new Node(0);
+//		Node n1 = new Node(1);
+//		Node n2 = new Node(2);
+//		Node n3 = new Node(3);
+//		Node n4 = new Node(4);
+//		
+//		
+//		pairs.add(new Pair(n3, n4));
+//		pairs.add(new Pair(n1,n2));
+//		pairs.add(new Pair(n2, n4));
+//		pairs.add(new Pair(n0,n1));
+//		
+//		Node buildTree = buildTree(pairs);
+//		preoder(buildTree);
+//		System.out.println();
 		
 	}
 
