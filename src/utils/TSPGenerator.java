@@ -26,11 +26,11 @@ public class TSPGenerator {
 		this.noOfCities = size;
 		random = new Random();
 		
-		this.symetric = false;
+		this.symetric = true;
 		this.minDistance = 1;
-		this.maxDistance = 100;
+		this.maxDistance = 50;
 		this.distribution = "UNIFORM_DISTRIBUTION";
-		this.sparsity = 0.01;
+		this.sparsity = 0.0001;
 	}
 	
 	public TSPGenerator(String name, int size, boolean symetric) {
@@ -42,7 +42,7 @@ public class TSPGenerator {
 		this.minDistance = 1;
 		this.maxDistance = 100;
 		this.distribution = "UNIFORM_DISTRIBUTION";
-		this.sparsity = 0.01;
+		this.sparsity = 0.0001;
 	}
 	
 	public TSPGenerator(String name, int size, boolean symetric, int minDist, int maxDist) {
@@ -55,7 +55,7 @@ public class TSPGenerator {
 		this.maxDistance = maxDist;
 
 		this.distribution = "UNIFORM_DISTRIBUTION";
-		this.sparsity = 0.01;
+		this.sparsity = 0.0001;
 	}
 
 	public TSPGenerator(String name, int size, boolean symetric, int minDist, int maxDist, String distribution) {
@@ -68,7 +68,7 @@ public class TSPGenerator {
 		this.minDistance = minDist;
 		this.distribution = distribution;
 		
-		this.sparsity = 0.01;
+		this.sparsity = 0.0001;
 	}
 	
 	public TSPGenerator(String name, int size, boolean symetric, int minDist, int maxDist, String distribution, double sparsity) {

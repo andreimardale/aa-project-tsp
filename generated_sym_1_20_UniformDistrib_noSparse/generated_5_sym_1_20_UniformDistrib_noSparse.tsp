@@ -1,0 +1,13 @@
+NAME: generated_5_sym_1_20_UniformDistrib_noSparse.tsp
+TYPE: TSP
+COMMENT: Test case generated with custom generator!
+DIMENSION: 5
+EDGE_WEIGHT_TYPE: EXPLICIT
+EDGE_WEIGHT_FORMAT: FULL_MATRIX
+DISPLAY_DATA_TYPE: TWOD_DISPLAY
+EDGE_WEIGHT_SECTION
+0 3 17 11 20 
+3 0 7 12 3 
+17 7 0 3 9 
+11 12 3 0 6 
+20 3 9 6 0 
