@@ -51,22 +51,17 @@ public class Main {
 		generator.generate();
 		
 		/* Examples of how to use the reading from file infrastructure */
-		TSPReader tspReader = new TSPReader("C:\\Users\\My pc\\Documents\\NetBeansProjects\\AAProject\\generated_asym_1_100_UniformDistrib_noSparse\\generated_15_asym_1_100_UniformDistrib_noSparse.tsp");
-		TSPInput tspInput = tspReader.read();
+//		TSPReader tspReader = new TSPReader("wi29.tsp");
+//		TSPInput tspInput = tspReader.read();
 
-		AlgorithmDriver driver = new AlgorithmDriver(new BranchAndBoundTSP());
-		driver.executeStrategy(tspInput);
+//		AlgorithmDriver driver = new AlgorithmDriver(new BranchAndBoundTSP());
+//		driver.executeStrategy(tspInput);
 //		
-		driver = new AlgorithmDriver(new CuttingAndRemovingEdges());
-		driver.executeStrategy(tspInput);
-		
-                driver = new AlgorithmDriver(new BruteForceTSP());
-		driver.executeStrategy(tspInput);
+//		driver = new AlgorithmDriver(new BruteForceTSP());
+//		driver.executeStrategy(tspInput);
 //		
 //		driver = new AlgorithmDriver(new DynamicProgrammingTSP());
 //		driver.executeStrategy(tspInput);
-
-
 
 //		/* Examples of how to use a hardcoded a graph */
 //		TSPInput tspInput2 = new TSPInput("Test Case 1", "TSP", "This is my example test case.", dist4.length, "EUC_2D", dist4);
