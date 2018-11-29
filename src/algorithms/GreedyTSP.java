@@ -3,12 +3,14 @@ package algorithms;
 import model.TSPInput;
 
 import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GreedyTSP extends AbstractTSP {
 
 
 
-    private void greedy (){
+    private void greedy (int initialCity){
 
 
         int shortestPath = 0;
@@ -17,16 +19,20 @@ public class GreedyTSP extends AbstractTSP {
         int cost = 0;
 
         int size = cityIndexes.size();
-        int currentCity = 0;
+        int currentCity = initialCity;
+        int startCity = currentCity;
 
-        getBestCircuit().add(cityIndexes.get(0));
-        cityIndexes.remove(0);
+        List<Integer> notVisited = new ArrayList<>(cityIndexes);
+
+
+        getBestCircuit().add(notVisited.get(currentCity));
+        notVisited.remove(currentCity);
 
         for(int i = 0; i < size - 1; i++){
 
-            shortestPath = DISTANCES[currentCity][cityIndexes.get(0)];
-            bestCity = cityIndexes.get(0);
-            for (int to : cityIndexes) {
+            shortestPath = DISTANCES[currentCity][notVisited.get(0)];
+            bestCity = notVisited.get(0);
+            for (int to : notVisited) {
                 path = DISTANCES[currentCity][to];
 
                 if(path < shortestPath){
@@ -36,18 +42,18 @@ public class GreedyTSP extends AbstractTSP {
             }
             currentCity = bestCity;
             getBestCircuit().add(bestCity);
-            cityIndexes.remove(cityIndexes.indexOf(bestCity));
+            notVisited.remove(notVisited.indexOf(bestCity));
             cost += shortestPath;
             }
 
-            getBestCircuit().add(0);
-            cost += DISTANCES[currentCity][0];
+            getBestCircuit().add(startCity);
+            cost += DISTANCES[currentCity][startCity];
             setMinimumCost(cost);
     }
 
 
     @Override
     public void execute(TSPInput tspInput) {
-        greedy();
+        greedy(0);
     }
 }
