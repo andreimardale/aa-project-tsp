@@ -13,13 +13,13 @@ import model.TSPInput;
 public class AntColonyTSP extends AbstractTSP {
 	
 	
-	private static final int MAX_INTERATIONS = 2500;
-	private static final int NO_OF_ANTS = 10;
+	public   int MAX_INTERATIONS = 2500;
+	public   int NO_OF_ANTS = 30;
 	private static final double ALPHA = 0.1, BETA = 2.0;
 	private static final double INITIAL_PHEROMONE_FOR_EACH_EDGE = 1;
 	private static final double RO = 0.1;
 	
-	private static final double Q0 = 0.9;
+	private static final double Q0 = 0.95;
 	private static final double ZETA = 0.1;
 	private static final double TAU0 = 0.000024;
 	
@@ -27,6 +27,10 @@ public class AntColonyTSP extends AbstractTSP {
 	int[][] dist;
 	int noOfCities;
 	
+	public AntColonyTSP(int max_iter, int ants) {
+		this.MAX_INTERATIONS = max_iter;
+		this.NO_OF_ANTS = ants;
+	}
 
 	@Override
 	public void execute(TSPInput tspInput) {
@@ -152,6 +156,9 @@ public class AntColonyTSP extends AbstractTSP {
             if (ant.hasVisited(l))
             	continue;
             
+            if (dist[i][l] == 0)
+        		dist[i][l] = 1;
+            
             double valueToNodeL = tau[i][l] * Math.pow(1.0 / dist[i][l], BETA);
             if (valueToNodeL >= maxValue) {
             	maxValue = valueToNodeL;
@@ -169,6 +176,9 @@ public class AntColonyTSP extends AbstractTSP {
         double sumOfAllPossibleValues = 0.0;
         for (int l = 0; l < noOfCities; l++) {
             if (!ant.hasVisited(l)) {
+            	if (dist[i][l] == 0)
+            		dist[i][l] = 1;
+            	
                 sumOfAllPossibleValues += Math.pow(tau[i][l], ALPHA) * Math.pow(1.0 / dist[i][l], BETA);
             }
         }
@@ -177,6 +187,8 @@ public class AntColonyTSP extends AbstractTSP {
             if (ant.hasVisited(j)) {
                 probabilities[j] = 0.0;
             } else {
+            	if (dist[i][j] == 0)
+            		dist[i][j] = 1;
                 double valueToNodeJ = Math.pow(tau[i][j], ALPHA) * Math.pow(1.0 / dist[i][j], BETA);
                 probabilities[j] = valueToNodeJ / sumOfAllPossibleValues;
             }

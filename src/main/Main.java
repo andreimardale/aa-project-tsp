@@ -1,5 +1,6 @@
 package main;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -47,42 +48,47 @@ public class Main {
 
 	public static void main(String[] args) {
 		
-		TSPGenerator generator = new TSPGenerator("test10.tsp", 5, true, 1, 5, "UNIFORM_DISTRIBUTION", 0.01);
-		generator.generate();
+//		TSPGenerator generator = new TSPGenerator("test10.tsp", 5, true, 1, 5, "UNIFORM_DISTRIBUTION", 0.01);
+//		generator.generate();
 		
 		/* Examples of how to use the reading from file infrastructure */
-//		TSPReader tspReader = new TSPReader("wi29.tsp");
-//		TSPInput tspInput = tspReader.read();
-
-//		AlgorithmDriver driver = new AlgorithmDriver(new BranchAndBoundTSP());
-//		driver.executeStrategy(tspInput);
-//		
-//		driver = new AlgorithmDriver(new BruteForceTSP());
-//		driver.executeStrategy(tspInput);
-//		
-//		driver = new AlgorithmDriver(new DynamicProgrammingTSP());
-//		driver.executeStrategy(tspInput);
-
-//		/* Examples of how to use a hardcoded a graph */
-//		TSPInput tspInput2 = new TSPInput("Test Case 1", "TSP", "This is my example test case.", dist4.length, "EUC_2D", dist4);
-//		TSPInput tspInput3 = new TSPReader("berlin52.tsp").read();
-//		AlgorithmDriver driver2 = new AlgorithmDriver(new AntColonyTSP());
-//		driver2.executeStrategy(tspInput3);
-	
-//		driver2 = new AlgorithmDriver(new DynamicProgrammingTSP());
-//		driver2.executeStrategy(tspInput2);
-//
-//		driver2 = new AlgorithmDriver(new BranchAndBoundTSP());
-//		driver2.executeStrategy(tspInput2);
+		TSPReader tspReader = new TSPReader("TSPLIB/d198.tsp");
+		TSPInput tspInput = tspReader.read();
 		
-		//driver2 = new AlgorithmDriver(new MinimumSpanningTreeTSP());
-		//driver2.executeStrategy(tspInput3);
-
-//		driver2 = new AlgorithmDriver(new GreedyTSP());
-//		driver2.executeStrategy(tspInput3);
-//	
-//		driver2 = new AlgorithmDriver(new GeneticProgrammingTSP());
-//		driver2.executeStrategy(tspInput3);
+		List<Integer> ants = Arrays.asList(40);
+		List<Integer> iterations = Arrays.asList(2500);
+		List<String> results = new ArrayList<>();
+		
+		
+		for (Integer ant : ants) {
+			for (Integer iteration : iterations) {
+				System.out.println("******Ants: " + ant + " Iterations: " + iteration + "******");
+				AntColonyTSP antColonyTSP = new AntColonyTSP(iteration, ant);
+				AlgorithmDriver driver = new AlgorithmDriver(antColonyTSP);
+				driver.executeStrategy(tspInput);
+				results.add("1)" +  ant + " " + iteration + " " + AbstractTSP.getMinimumCost());
+				
+				driver = new AlgorithmDriver(antColonyTSP);
+				driver.executeStrategy(tspInput);
+				results.add("2)" + ant + " " + iteration + " " + AbstractTSP.getMinimumCost());
+				
+				driver = new AlgorithmDriver(antColonyTSP);
+				driver.executeStrategy(tspInput);
+				results.add("3)" + ant + " " + iteration + " " + AbstractTSP.getMinimumCost());
+				
+				driver = new AlgorithmDriver(antColonyTSP);
+				driver.executeStrategy(tspInput);
+				results.add("4)" + ant + " " + iteration + " " + AbstractTSP.getMinimumCost());
+				
+				driver = new AlgorithmDriver(antColonyTSP);
+				driver.executeStrategy(tspInput);
+				results.add("5)" + ant + " " + iteration + " " + AbstractTSP.getMinimumCost());
+			}
+		}
+		
+		System.out.println(results);
+		
+		
 	}
 
 	

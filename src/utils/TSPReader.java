@@ -49,10 +49,10 @@ public class TSPReader {
                 case "EUC_2D": {
                     List<Point> input_points = new ArrayList<>();
                     for (int i = 0; i < number_of_nodes; i++) {
-                        String line=reader.readLine();
-                        int index = Integer.parseInt(line.split(" ")[0]);
-                        double x_coord = Double.parseDouble(line.split(" ")[1]);
-                        double y_coord = Double.parseDouble(line.split(" ")[2]);
+                        String line=reader.readLine().trim();
+                        int index = Integer.parseInt(line.split("\\s+")[0]);
+                        double x_coord = Double.parseDouble(line.split("\\s+")[1]);
+                        double y_coord = Double.parseDouble(line.split("\\s+")[2]);
                         input_points.add(new Point(x_coord, y_coord, index));
                     }
                     input = new TSPInput(information.get(NAME), information.get(TYPE),
