@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import algorithms.*;
+import gui.MainFrame;
 import model.Point;
 import model.TSPInput;
 import utils.TSPGenerator;
@@ -52,15 +53,28 @@ public class Main {
 //		generator.generate();
 		
 		/* Examples of how to use the reading from file infrastructure */
-		TSPReader tspReader = new TSPReader("TSPLIB/d198.tsp");
+                
+            try {
+                for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                    if ("Nimbus".equals(info.getName())) {
+                        javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                        break;
+                    }
+                }
+            } catch (Exception ex) {
+
+            }
+            MainFrame frame = new MainFrame();
+               frame.setVisible(true);
+		/*TSPReader tspReader = new TSPReader("TSPLIB/d198.tsp");
 		TSPInput tspInput = tspReader.read();
 		
 		List<Integer> ants = Arrays.asList(40);
 		List<Integer> iterations = Arrays.asList(2500);
-		List<String> results = new ArrayList<>();
+		List<String> results = new ArrayList<>();*/
 		
 		
-		for (Integer ant : ants) {
+		/*for (Integer ant : ants) {
 			for (Integer iteration : iterations) {
 				System.out.println("******Ants: " + ant + " Iterations: " + iteration + "******");
 				AntColonyTSP antColonyTSP = new AntColonyTSP(iteration, ant);
@@ -86,7 +100,7 @@ public class Main {
 			}
 		}
 		
-		System.out.println(results);
+		System.out.println(results);*/
 		
 		
 	}

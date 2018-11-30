@@ -113,8 +113,8 @@ public class MinimumSpanningTreeTSP extends AbstractTSP {
                 return t.weight - t1.weight;
             }
         });
+        initTemporary(input);
         preorder(build_tree(edges), input);
-        getBestCircuit().add(getBestCircuit().get(0));
         calculate_route_cost(input);
     }
     
@@ -211,9 +211,18 @@ public class MinimumSpanningTreeTSP extends AbstractTSP {
     }
     ArrayList<Node> visited_preorder = new ArrayList<>();
 
+    ArrayList<Integer> temporary = new ArrayList<>();
+    public void initTemporary(TSPInput input) {
+    	for(int i=0;i<input.getDimension();i++) {
+    		temporary.add(null);
+    	}
+    }
+    int index = 0;
     public void preorder(Node n, TSPInput input) {
         visited_preorder.add(n);
-        getBestCircuit().add(n.index);
+        temporary.set(index,n.index);
+        index++;
+        setBestCircuit(temporary);
         for (Node node : n.children) {
             if (!visited_preorder.contains(node)) {
                 preorder(node, input);

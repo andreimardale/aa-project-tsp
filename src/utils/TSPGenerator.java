@@ -20,7 +20,9 @@ public class TSPGenerator {
 	
 	private double sparsity; // should be between 0 and 1
 	
-	
+	private String resultForUI;
+
+   
 	public TSPGenerator(String name, int size) {
 		this.fileName = name;
 		this.noOfCities = size;
@@ -99,7 +101,8 @@ public class TSPGenerator {
 		result.append("DISPLAY_DATA_TYPE: ").append("TWOD_DISPLAY").append('\n');
 		result.append("EDGE_WEIGHT_SECTION").append('\n');
 		result.append(distances);
-
+                
+                resultForUI = new String(result.toString());
 		
 	    BufferedWriter writer;
 		try {
@@ -181,4 +184,7 @@ public class TSPGenerator {
 		
 		return res.toString();
 	}
+     public String getResultForUI() {
+        return resultForUI;
+    }
 }
