@@ -35,12 +35,12 @@ public class GeneticProgrammingTSP extends AbstractTSP {
 
 		/*
 		 * we evovle the population to a limit in order to get new generations with
-		 * better fittness
-		 */
+		 * better fittness*/
 		for (int i = 0; i < iterationSize; i++) {
 			pop = evolvePopulation(pop, crossOverType);
-
+			
 			Tour fittest_tour = pop.getFittest();
+			System.out.println(fittest_tour.getDistance()+"\t"+fittest_tour);
 			setBestCircuit(fittest_tour.cities);
 			setMinimumCost((int) fittest_tour.getDistance());
 		}
@@ -68,8 +68,8 @@ public class GeneticProgrammingTSP extends AbstractTSP {
 		for (int i = offset; i < newPopulation.getSize(); i++) {
 			/* get the two parents using the tournament function */
 
-			Tour parent_1 = tournament(population);
-			Tour parent_2 = tournament(population);
+			Tour parent_1 = population.getFittest();
+			Tour parent_2 = getSecondParent(population);
 			/*
 			 * while(true) { parent_2 = tournament(population);
 			 * if(!parent_1.equals(parent_2)) { break; } }
@@ -95,6 +95,7 @@ public class GeneticProgrammingTSP extends AbstractTSP {
 				break;
 			}
 			}
+			
 			child.distance = child.getDistance();
 			/* add the new child to the new population */
 			newPopulation.tours.add(child);
@@ -112,7 +113,22 @@ public class GeneticProgrammingTSP extends AbstractTSP {
 	 * this function given a tour it mutate its genes which are the cities by
 	 * swaping them
 	 */
-
+	private Tour getSecondParent(Population pop) {
+		int first = Integer.MAX_VALUE;
+		int second = Integer.MAX_VALUE;
+		int index_of_p2 = 0;
+		for (int j = 0; j < popSize; j++) {
+			if(pop.tours.get(j).getDistance()<=first) {
+				second  = first;
+				first = (int)pop.tours.get(j).getDistance();
+			} else if(pop.tours.get(j).getDistance()<second && pop.tours.get(j).getDistance() != first) {
+				second = (int)pop.tours.get(j).getDistance();
+				index_of_p2 = j;
+			}
+		}
+		return pop.tours.get(index_of_p2);
+		
+	}
 	private void mutate(Tour tour) {
 		for (int i = 0; i < tour.cities.size(); i++) {
 
@@ -252,6 +268,7 @@ public class GeneticProgrammingTSP extends AbstractTSP {
 			child2.cities.set(i, parent_2.cities.get(i));
 
 		}
+		
 		for (int i = startIndex; i <= endIndex; i++) {
 
 			partition_1.add(parent_1.cities.get(i));
@@ -260,19 +277,38 @@ public class GeneticProgrammingTSP extends AbstractTSP {
 			makeHole(child2.cities, child1.cities.get(i), startIndex, endIndex);
 
 		}
-		int index_segment_1 = 0;
-		int index_segment_2 = 0;
-
-		for (int i = 0; i < child1.cities.size(); i++) {
-			if (child1.cities.get(i) == null) {
-				child1.cities.set(i, partition_1.get(index_segment_1));
-				index_segment_1++;
-			}
-			if (child2.cities.get(i) == null) {
-				child2.cities.set(i, partition_2.get(index_segment_2));
-				index_segment_2++;
+		int index = startIndex;
+		for(int i=0;i<child1.cities.size();i++) {
+			if((i<startIndex || i>endIndex) &&  child1.cities.get(i)==null) {
+				
+				int city = child1.cities.get(index);
+				child1.cities.set(i, city);
+				child1.cities.set(index,null);
+				index++;
 			}
 		}
+		index = startIndex;
+		for(int i=0;i<child2.cities.size();i++) {
+			if((i<startIndex || i>endIndex) &&  child2.cities.get(i)==null) {
+				
+				int city = child2.cities.get(index);
+				child2.cities.set(i, city);
+				child2.cities.set(index,null);
+				index++;
+			}
+		}
+		
+		index = startIndex;
+		for (int i = 0; i <partition_1.size(); i++) {
+
+			int city1=partition_1.get(i);
+			int city2=partition_2.get(i);
+			child1.cities.set(index, city2);
+			child2.cities.set(index, city1);
+			index++;
+
+		}
+		
 		if (child1.getDistance() < child2.getDistance()) {
 			return child1;
 		} else {
@@ -282,7 +318,7 @@ public class GeneticProgrammingTSP extends AbstractTSP {
 
 	private void makeHole(ArrayList<Integer> cities, int city, int start, int end) {
 		for (int i = 0; i < cities.size(); i++) {
-			if (cities.get(i) == city && ((i < start) || (i > end))) {
+			if (cities.get(i)!=null && cities.get(i) == city) {
 				cities.set(i, null);
 				break;
 			}
@@ -299,6 +335,10 @@ public class GeneticProgrammingTSP extends AbstractTSP {
 		int startIndex = (int) (Math.random() * parent_1.cities.size());
 		int endIndex = (int) (Math.random() * parent_1.cities.size());
 
+		while (startIndex == endIndex) {
+			endIndex = (int) (Math.random() * parent_1.cities.size());
+		}
+		
 		/* fill child with cities from first parent */
 		for (int i = 0; i < child.cities.size(); i++) {
 

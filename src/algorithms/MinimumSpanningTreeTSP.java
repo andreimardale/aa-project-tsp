@@ -114,7 +114,7 @@ public class MinimumSpanningTreeTSP extends AbstractTSP {
             }
         });
         initTemporary(input);
-        preorder(build_tree(edges), input);
+        preorder(build_tree(getMST(edges,input.getDimension())), input);
         calculate_route_cost(input);
     }
     
@@ -147,14 +147,14 @@ public class MinimumSpanningTreeTSP extends AbstractTSP {
         }
     }
 
-    public void calculate_route_cost(TSPInput input) {
-        int sum = 0;
-        for (int i = 0; i < input.getDimension() - 1; i++) {
-            sum += input.getDist()[getBestCircuit().get(i)][getBestCircuit().get(i + 1)];
-        }
-        sum += input.getDist()[getBestCircuit().get(input.getDimension() - 1)][getBestCircuit().get(0)];
-        setMinimumCost(sum);
-    }
+	public void calculate_route_cost(TSPInput input) {
+		int sum = 0;
+		for (int i = 0; i < input.getDimension() - 1; i++) {
+			sum += input.getDist()[getBestCircuit().get(i)][getBestCircuit().get(i + 1)];
+		}
+		sum += input.getDist()[getBestCircuit().get(input.getDimension() - 1)][getBestCircuit().get(0)];
+		setMinimumCost(sum);
+	}
 
     public ArrayList<Edge> getMST(ArrayList<Edge> sorted_edges, int n) {
         ArrayList<Edge> result = new ArrayList<>();

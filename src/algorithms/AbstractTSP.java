@@ -38,14 +38,17 @@ public abstract class AbstractTSP {
         AbstractTSP.bestCircuit = new ArrayList<>(bestCircuit);
         if (bestCircuit.size() != 0) 
         {
-        	try {
+        	/*try {
 				Thread.sleep(200);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+			}*/
+			if (mainFrame != null) {
+				mainFrame.getTourCostLabel().setText(minimumCost + "");
+				mainFrame.getGraph().setNewTour(new ArrayList<>(AbstractTSP.bestCircuit));
 			}
-        	mainFrame.getTourCostLabel().setText(minimumCost+"");
-            mainFrame.getGraph().setNewTour(new ArrayList<>(AbstractTSP.bestCircuit));
+        	
         }
         
     }
@@ -55,14 +58,16 @@ public abstract class AbstractTSP {
             AbstractTSP.bestCircuit.add(i);
         }
         if (AbstractTSP.bestCircuit.size() != 0) {
-        	try {
+        	/*try {
 				Thread.sleep(200);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+			}*/
+        	if (mainFrame != null) {
+				mainFrame.getTourCostLabel().setText(minimumCost + "");
+				mainFrame.getGraph().setNewTour(new ArrayList<>(AbstractTSP.bestCircuit));
 			}
-        	mainFrame.getTourCostLabel().setText(minimumCost+"");
-        	mainFrame.getGraph().setNewTour(new ArrayList<>(AbstractTSP.bestCircuit));
         }
     }
 

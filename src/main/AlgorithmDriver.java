@@ -38,11 +38,12 @@ public class AlgorithmDriver {
 		List<Integer> bestCircuit = AbstractTSP.getBestCircuit();
 		minCostForGUI = minimumCost;
 		runningForGUI = seconds;
-		System.out.println(strategy.getClass());
+		System.out.println(minimumCost);
+		/*System.out.println(strategy.getClass());
 		System.out.println("Best circuit has cost  " + minimumCost);
 		System.out.println(bestCircuit);
 		System.out.println("Runtime: " + seconds);
-		System.out.println("======================================");
+		System.out.println("======================================");*/
 
 	}
 
