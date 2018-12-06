@@ -40,7 +40,6 @@ public class GeneticProgrammingTSP extends AbstractTSP {
 			pop = evolvePopulation(pop, crossOverType);
 			
 			Tour fittest_tour = pop.getFittest();
-			System.out.println(fittest_tour.getDistance()+"\t"+fittest_tour);
 			setBestCircuit(fittest_tour.cities);
 			setMinimumCost((int) fittest_tour.getDistance());
 		}
@@ -273,40 +272,23 @@ public class GeneticProgrammingTSP extends AbstractTSP {
 
 			partition_1.add(parent_1.cities.get(i));
 			partition_2.add(parent_2.cities.get(i));
-			makeHole(child1.cities, child2.cities.get(i), startIndex, endIndex);
-			makeHole(child2.cities, child1.cities.get(i), startIndex, endIndex);
-
-		}
-		int index = startIndex;
-		for(int i=0;i<child1.cities.size();i++) {
-			if((i<startIndex || i>endIndex) &&  child1.cities.get(i)==null) {
-				
-				int city = child1.cities.get(index);
-				child1.cities.set(i, city);
-				child1.cities.set(index,null);
-				index++;
-			}
-		}
-		index = startIndex;
-		for(int i=0;i<child2.cities.size();i++) {
-			if((i<startIndex || i>endIndex) &&  child2.cities.get(i)==null) {
-				
-				int city = child2.cities.get(index);
-				child2.cities.set(i, city);
-				child2.cities.set(index,null);
-				index++;
-			}
-		}
 		
-		index = startIndex;
-		for (int i = 0; i <partition_1.size(); i++) {
+		}
+		for (int i = 0; i < partition_1.size(); i++) {
 
-			int city1=partition_1.get(i);
-			int city2=partition_2.get(i);
-			child1.cities.set(index, city2);
-			child2.cities.set(index, city1);
+			makeHole(child1.cities, partition_2.get(i));
+			makeHole(child2.cities, partition_1.get(i));
+
+		}
+
+		shiftCities(child1, startIndex,endIndex);
+		shiftCities(child2, startIndex,endIndex);
+		
+		int index = startIndex;
+		for (int i = 0; i < partition_1.size(); i++) {
+			child1.cities.set(index,partition_2.get(i));
+			child2.cities.set(index,partition_1.get(i));
 			index++;
-
 		}
 		
 		if (child1.getDistance() < child2.getDistance()) {
@@ -316,7 +298,72 @@ public class GeneticProgrammingTSP extends AbstractTSP {
 		}
 	}
 
-	private void makeHole(ArrayList<Integer> cities, int city, int start, int end) {
+	private boolean checkPlaceAtLeft(ArrayList<Integer> cities, int startIndex) 
+	{
+		for (int i = 0; i < startIndex; i++) 
+		{
+			if(cities.get(i)==null)
+				{
+					return true;
+				}
+		}
+		return false;
+	}
+	private boolean checkPlaceAtRight(ArrayList<Integer> cities, int endIndex) {
+		for (int i = endIndex+1; i < cities.size(); i++) {
+			if(cities.get(i)==null)
+				return true;
+		}
+		return false;
+	}
+	private void shiftCities(Tour child1,int startIndex,int endIndex) {
+		for(int i=0;i<child1.cities.size();i++) 
+		{
+			if(child1.cities.get(i)==null)
+			{
+				if (checkPlaceAtLeft(child1.cities, startIndex)) 
+				{
+					for (int j = i; j < child1.cities.size(); j++)
+					{
+						if (child1.cities.get(j) != null) 
+						{
+							child1.cities.set(i, child1.cities.get(j));
+							child1.cities.set(j, null);
+							break;
+						}
+					}
+				}
+				else
+				{
+					break;
+				}
+			}
+			
+		}
+			
+		for(int i=child1.cities.size()-1;i>=0;i--)
+		{
+			if(child1.cities.get(i)==null) 
+			{
+				if (checkPlaceAtRight(child1.cities, endIndex)) 
+				{
+					for (int j = i; j >= 0; j--) 
+					{
+						if (child1.cities.get(j) != null) 
+						{
+							child1.cities.set(i, child1.cities.get(j));
+							child1.cities.set(j, null);
+							break;
+						}
+					}
+				}
+				else
+					break;
+			}
+		}
+	}
+
+	private void makeHole(ArrayList<Integer> cities, int city) {
 		for (int i = 0; i < cities.size(); i++) {
 			if (cities.get(i)!=null && cities.get(i) == city) {
 				cities.set(i, null);
