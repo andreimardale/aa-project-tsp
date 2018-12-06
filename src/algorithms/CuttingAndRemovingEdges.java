@@ -17,7 +17,6 @@ public class CuttingAndRemovingEdges extends AbstractTSP
         originalMatrix=tspInput.getDist();
         numberOfEdges=((originalMatrix.length*(originalMatrix.length-1))/2);
         makeDiagonalInfinity(originalMatrix);
-//        printMatrix(originalMatrix);
         int [][] newMatrix= copyMatrix(originalMatrix);
         int reducedCost = reduceMatrix(newMatrix);
         Subset subsets[];
@@ -157,6 +156,7 @@ public class CuttingAndRemovingEdges extends AbstractTSP
     
     public void putRowAsInf_ExceptIndex_index2(int index, int index2, int[][]matrix)
     {
+//        put a the row of index as infinity excpet for matrix[index][index2]
         for(int i=0;i<matrix.length;i++)
         {
             if(i!=index2)
@@ -165,6 +165,7 @@ public class CuttingAndRemovingEdges extends AbstractTSP
     }
     public void putColumnAsInf_ExceptIndex_index2(int index, int index2, int [][] matrix)
     {
+        //put all column of [index] as infinity except for matrix[index2][index]
         for(int i=0;i<matrix.length;i++)
         {
             if(i!=index2)
@@ -173,6 +174,7 @@ public class CuttingAndRemovingEdges extends AbstractTSP
     }
     public Edge chooseEdgeThatMaximizesCost(TreeNode node)
     {
+        //return thr rdgr that maximizes the cost
         int minimum=Integer.MAX_VALUE;
         int city1=Integer.MAX_VALUE;
         int city2=Integer.MAX_VALUE;
@@ -324,21 +326,6 @@ public class CuttingAndRemovingEdges extends AbstractTSP
     } 
     
     
-    public void printMatrix(int [][] matrix)
-    {
-        for (int i = 0; i < matrix.length; i++) 
-        {
-            for (int j = 0; j < matrix.length; j++) 
-            {
-                if(matrix[i][j]!=Integer.MAX_VALUE)
-                    System.out.print(matrix[i][j]+"         ");
-                else
-                    System.out.print("inf         ");
-            }
-            System.out.println("");
-        }
-    }
-    
     
     public int reduceMatrix(int [][]Oldmatrix)
     {
@@ -375,7 +362,7 @@ public class CuttingAndRemovingEdges extends AbstractTSP
         return reducedCost;
     }
     
-    
+    //this function reduces the columns and return the reduced cost for the columns
     public int reduceColumns(int [][]oldMatrix)
     {
         int [][]matrix=copyMatrix(oldMatrix);
@@ -488,6 +475,8 @@ public class CuttingAndRemovingEdges extends AbstractTSP
                 i=-1;
             }
         }
+        tour.remove(tour.size()-1);
+        System.out.println(tour);
         return tour;
     }
 }
@@ -563,34 +552,6 @@ class TreeNode
             System.out.print(array.get(i)+"  ");
         }
     }
-    
-    
-    public void printMatrix(int[][] matrix) 
-    {
-        for (int i = 0; i < matrix.length; i++) 
-        {
-            for (int j = 0; j < matrix[0].length; j++) 
-            {
-                if(matrix[i][j]==Integer.MAX_VALUE)
-                    System.out.print("inf      ");
-                else
-                    System.out.print(matrix[i][j]+ "      "); 
-           }
-            System.out.println();
-        }
-    }
-    @Override
-    public String toString()
-    {
-        String s = "";
-        System.out.print("Edges: ");
-        printArrayList(this.getEdges());
-        System.out.println("\nMatrix: ");
-        printMatrix(this.getMatrix());
-        System.out.println("Reduction cost :"+recutionCost);
-        System.out.println("");
-        return s;
-    }
 }
 
 //class to represent an edge
@@ -635,43 +596,26 @@ class Edge {
         Edge other = (Edge) obj;
         return this.city1 == other.city1 && this.city2==other.city2;
     }
-    
-
-    @Override
-    public String toString() {
-        String s = "";
-        if(!this.isTaken())
-            s+="Not";
-        s +="("+getCity1();
-        s += getCity2()+")";
-        return s;
-    }
-
 }
 
 //class to represent subsets for disjoint sets
 class Subset
 {
-	int parent;
-	int rank;
-	public Subset()
-	{
-	}
-	
-	public int getParent()
-	{
-		return parent;
-	}
-	public int getRank()
-	{
-		return rank;
-	}
 
-    @Override
-    public String toString() {
-        return "Subset{" + "parent=" + parent + ", rank=" + rank + '}';
+    int parent;
+    int rank;
+
+    public Subset() {
     }
-        
+
+    public int getParent() {
+        return parent;
+    }
+
+    public int getRank() {
+        return rank;
+    }
+   
 }
 
 
