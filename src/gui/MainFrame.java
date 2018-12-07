@@ -25,9 +25,10 @@ import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import main.AlgorithmDriver;
+
 import main.Main;
 import model.TSPInput;
+import utils.AlgorithmDriver;
 import utils.TSPGenerator;
 import utils.TSPReader;
 

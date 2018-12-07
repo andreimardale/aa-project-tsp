@@ -1,7 +1,5 @@
 package model;
 
-import utils.StdDraw;
-
 public class Point {
 	private double x; /* x coordinate of the point */
 	private double y; /* y coordinate of the point */
@@ -34,15 +32,4 @@ public class Point {
 	public String toString() {
 		return "[City " + index + "]-Position (" + String.format("%6.5f %6.5f", this.x, this.y) + ")";
 	}
-	
-	
-	/* Draw this point with StdDraw library */
-	public void draw() {
-		StdDraw.point(this.x, this.y);
-	}
-	
-	/* Draw a line from current point to destPoint */
-    public void drawTo(Point destPoint) {
-        StdDraw.line(this.x, this.y, destPoint.getX(), destPoint.getY());
-    }
 }

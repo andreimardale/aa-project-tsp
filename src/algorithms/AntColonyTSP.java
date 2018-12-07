@@ -1,7 +1,5 @@
 package algorithms;
 
-
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -11,7 +9,6 @@ import java.util.Set;
 import model.TSPInput;
 
 public class AntColonyTSP extends AbstractTSP {
-	
 	
 	public   int MAX_INTERATIONS = 2500;
 	public   int NO_OF_ANTS = 30;
@@ -69,22 +66,6 @@ public class AntColonyTSP extends AbstractTSP {
 	}
 
 	private void updatePheromones(double[][] tau) {
-//		for (int i = 0; i < noOfCities; i++) {
-//			for (int j = 0; j < noOfCities; j++) {
-//				tau[i][j] = (1 - RO) * tau[i][j];
-//			}
-//		}
-//		
-//		
-//        for (Ant ant : ants) {
-//            double currentAntContribution = 1.0 / ant.getCostOfTour(dist);
-//            
-//            for (int i = 0; i < noOfCities - 1; i++) {
-//                tau[ant.getCityAt(i)][ant.getCityAt(i + 1)] += currentAntContribution;
-//            }
-//            tau[ant.getCityAt(noOfCities - 1)][ant.getCityAt(0)] += currentAntContribution;
-//        }
-		
 		List<Integer> globalBestTour = getBestCircuit();
 		double globalBestAntContribution = 1.0 / getCostOfTour(globalBestTour);
       
