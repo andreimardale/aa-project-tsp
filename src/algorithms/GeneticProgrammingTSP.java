@@ -40,7 +40,7 @@ public class GeneticProgrammingTSP extends AbstractTSP {
 			pop = evolvePopulation(pop, crossOverType);
 			
 			Tour fittest_tour = pop.getFittest();
-			System.out.println(fittest_tour.getDistance()+"\t"+fittest_tour);
+//			System.out.println(fittest_tour.getDistance()+"\t"+fittest_tour);
 			setBestCircuit(fittest_tour.cities);
 			setMinimumCost((int) fittest_tour.getDistance());
 		}
