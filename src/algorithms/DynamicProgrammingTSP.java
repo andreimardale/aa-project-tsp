@@ -20,18 +20,28 @@ public class DynamicProgrammingTSP extends AbstractTSP {
 		int[][] dist = tspInput.getDist();
 		int n = tspInput.getDimension();
 		
-		Map<Pair, Integer> C = new HashMap<>();
-		Map<Pair, Integer> parents = new HashMap<>();
+		/* Map C
+		 * Key = <Pair> between a subset of nodes S and a reachable destination node 
+		 * Value = x the shortest path from initial node to node x, passing through every node in S exactly once
+		 **/
+		Map<Pair, Integer> C = new HashMap<>(); /* This map replaces the normal Dynamic Prog. matrix, as we need for the row index a subset, not an integer*/
+		Map<Pair, Integer> parents = new HashMap<>(); /* Map for keeping the parents. */
 		
+		/* Generate all possible subsets, put in a map where:
+		 * Key = Integer - the size of subsets of the corresponding bucket
+		 * Value: List<Sets> the list of subsets of size indicated by the key.
+		 * Example: allSubSets.get(1) -> the list of all subsets of size 1, containing the original node iteself. */
 		Map<Integer, List<Set<Integer>>> allSubSets = generateAllSubSets(n);
 
+		/* Initialize the data structures. For example, the distance to reach node 0, passing through node {0} is 0*/
 		C.put(new Pair(new HashSet<Integer>(Arrays.asList(0)), 0), 0);
 		parents.put(new Pair(new HashSet<Integer>(Arrays.asList(0)), 0), 0);
 	
+		/* Iterate over all dimension of subsets: */
 		for (int s = 2; s <= n; s++) {
-			List<Set<Integer>> listOfSubsetsOfSizeS = allSubSets.get(s);
-			for (Set<Integer> S : listOfSubsetsOfSizeS) {
-				C.put(new Pair(S, 0), INFINITY);
+			List<Set<Integer>> listOfSubsetsOfSizeS = allSubSets.get(s); /* Get all subsets of size s*/
+			for (Set<Integer> S : listOfSubsetsOfSizeS) { /* Iterate on all subsets of size s*/
+				C.put(new Pair(S, 0), INFINITY); /* To avoid going back to original node, ie situation like we start from 0, visit 1,2,3 and then we can choose between 4 and 5. We should not take 0 as a possible choice. */
 				
 				for (Integer j : S) {
 					if (j == 0)
@@ -40,6 +50,7 @@ public class DynamicProgrammingTSP extends AbstractTSP {
 					int minValue = INFINITY;
 					int parent = -1;
 					
+					/* Try every possible available node in current subset to get the minimum path.*/
 					for (Integer i : S) {
 						if (i == j)
 							continue;
@@ -47,12 +58,12 @@ public class DynamicProgrammingTSP extends AbstractTSP {
 						Set<Integer> tempS = new HashSet<>(S);
 						tempS.remove(j);
 						int crt = C.get(new Pair(tempS, i)) + dist[i][j];
-						if (crt < minValue) {
+						if (crt < minValue) { /* Compare and set the minimum. */
 							minValue = crt;
 							parent = i;
 						}
 					}
-					
+					/* Save the newly computed minimum. The minimum cost to reach node j, from 0, using all nodes in subset S of size s is minValue. */
 					C.put(new Pair(S, j), minValue);
 					parents.put(new Pair(S, j), parent);
 				}
@@ -61,6 +72,7 @@ public class DynamicProgrammingTSP extends AbstractTSP {
 
 		int minDist = INFINITY;
 		Pair lastPair = null;
+		/* Get the minimum tour after also adding the path from last reachable node to original node. */
 		for (Entry<Pair, Integer> entry : C.entrySet()) {
 			if (entry.getKey().S.size() != n)
 				continue;
@@ -72,8 +84,10 @@ public class DynamicProgrammingTSP extends AbstractTSP {
 		
 		}
 		
+		/* Build tour using parents map.*/
 		List<Integer> tour = getTour(lastPair, parents);
 		
+		/* Set the global minimum. */
 		setMinimumCost(minDist);
 		setBestCircuit(tour);
 	}

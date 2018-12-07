@@ -1,8 +1,6 @@
 package algorithms;
 
 import java.util.ArrayList;
-import java.util.List;
-import model.Point;
 import model.TSPInput;
 
 public class BranchAndBoundTSP extends AbstractTSP {

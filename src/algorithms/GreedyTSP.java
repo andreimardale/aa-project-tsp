@@ -12,7 +12,6 @@ public class GreedyTSP extends AbstractTSP {
 
     private void greedy (int initialCity){
 
-
         int shortestPath = 0;
         int bestCity = 0;
         int path = 0;
@@ -23,7 +22,6 @@ public class GreedyTSP extends AbstractTSP {
         int startCity = currentCity;
 
         List<Integer> notVisited = new ArrayList<>(cityIndexes);
-
 
         getBestCircuit().add(notVisited.get(currentCity));
         notVisited.remove(currentCity);

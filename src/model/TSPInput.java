@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import utils.DistanceDriver;
 
+/* The class which models the input of a TSP instance. It supports both types of inputs (points and distances) */
 public class TSPInput {
 
 	private String name;
@@ -23,7 +24,7 @@ public class TSPInput {
 	public TSPInput(String name, String type, String comment, int dimension, String edgeWeightType,	List<Point> points) {
 		this(name, type, comment, dimension, edgeWeightType);
 		this.dist = generateAdjancencyMatrix(points);
-		this.cityIndexes = computeCityIndexes(points);
+		this.cityIndexes = computeCityIndexes(points); /* If it get points, computes automatically the distance between them and makes it available in the common dist matrix.*/
 	}
 
 	public TSPInput(String name, String type, String comment, int dimension, String edgeWeightType, int[][] dist) {

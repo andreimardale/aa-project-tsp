@@ -7,9 +7,10 @@ import algorithms.AbstractTSP;
 import gui.MainFrame;
 import model.TSPInput;
 
+/* The main class for loading algorithms. We use a Strategy Design pattern and this class represents the driver.*/
 public class AlgorithmDriver {
 
-	private AbstractTSP strategy;
+	private AbstractTSP strategy; /* The different kind of algorithms. */
 	private int minCostForGUI;
 	private double runningForGUI;
 	private MainFrame mainFrame;
@@ -21,6 +22,8 @@ public class AlgorithmDriver {
 		this.mainFrame = mainFrame;
 	}
 
+	/* Method which starts the algorithm run. First it sets up the input the starts the timer. At the end, it displays the results 
+	 * collected from the algorithms abstract class.*/
 	public void executeStrategy(TSPInput tspInput) {
 		AbstractTSP.DISTANCES = tspInput.getDist();
 		AbstractTSP.cityIndexes = tspInput.getCityIndexes();

@@ -5,6 +5,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Random;
 
+/* Generator class which can create TSP instances similar to the ones on TSPLIB. 
+ * The number of nodes, the symetry, the range of values, the underlying distribution (Uniform or Gaussian) 
+ * and also the sparsity of the instance can be tuned. */
 public class TSPGenerator {
 	
 	Random random;

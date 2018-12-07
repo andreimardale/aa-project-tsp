@@ -10,8 +10,7 @@ import java.util.logging.Logger;
 import model.Point;
 import model.TSPInput;
 
-
-
+/* Class for reading input from a file, designed to follow the TSPLIB file pattern.*/
 public class TSPReader {
     private String fileName;
     private static final String NAME = "NAME";
@@ -42,7 +41,7 @@ public class TSPReader {
                 String value = splittedLine[1].trim();
                 information.put(key, value);
             }
-            
+            /* Support reading input both as a list of euclidian points and as a distance matrix, TSPInput has 2 constructors.*/
             int number_of_nodes = Integer.parseInt(information.get(DIMENSION));
             String method_to_calc_distance=information.get(EDGE_WEIGHT_TYPE);
             switch (method_to_calc_distance) {

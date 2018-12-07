@@ -10,15 +10,15 @@ import model.TSPInput;
 
 public class AntColonyTSP extends AbstractTSP {
 	
-	public   int MAX_INTERATIONS = 2500;
-	public   int NO_OF_ANTS = 30;
-	private static final double ALPHA = 0.1, BETA = 2.0;
-	private static final double INITIAL_PHEROMONE_FOR_EACH_EDGE = 1;
-	private static final double RO = 0.1;
+	public   int MAX_INTERATIONS = 2500; /* Number of total iterations for the main loop. */
+	public   int NO_OF_ANTS = 30; /* Number of ants available. */
+	private static final double ALPHA = 0.1, BETA = 2.0; /* ALPHA controls the importance of the pheromone trail, whiele BETA the importance of the dist. heuristic */
+	private static final double INITIAL_PHEROMONE_FOR_EACH_EDGE = 1; /* Initial value for the pheromone trails. */
+	private static final double RO = 0.1; /* Controls the evaporation rate. */ 
 	
-	private static final double Q0 = 0.95;
-	private static final double ZETA = 0.1;
-	private static final double TAU0 = 0.000024;
+	private static final double Q0 = 0.95; /* Parameteres specific to ACS -> probability to make a more aggresive choice when picking next city, that is not to take into account the probabilities */
+	private static final double ZETA = 0.1; /* Parameter for the local pheromone update */
+	private static final double TAU0 = 0.000024; /* Parameter for the local pheromone update */
 	
 	private Random random = new Random();
 	int[][] dist;
@@ -34,25 +34,31 @@ public class AntColonyTSP extends AbstractTSP {
 		noOfCities = tspInput.getDimension();
 		dist = tspInput.getDist();
 		
+		/* Initialize the pheromones on all possible trail*/
 		double[][] tau = initializePheromones(noOfCities);
+		
+		/* Spawn the ants*/
 		List<Ant> ants = createAnts(noOfCities);
 		
+		/* Main loop*/
 		for (int t = 1; t <= MAX_INTERATIONS; t++) {
+			
+			/* Place evert ant in a random city */
 			for (Ant ant : ants) {
 				ant.reset();
 				ant.visitCity(random.nextInt(noOfCities));
 			}
 			
-			moveAnts(ants, noOfCities, tau);
-			updateBestTour(ants);
-			updatePheromones(tau);
+			moveAnts(ants, noOfCities, tau); /* Every ant completes its own tour. */
+			updateBestTour(ants); /* Update the best tour if one of the current tours are better. */
+			updatePheromones(tau); /* Once all ants finished the tour of iteration t, the global best ant updates the pheromone.*/
 			
 		}
 		
 	}
 
 	private void updateBestTour(List<Ant> ants) {
-		
+		/* Update the global best tour with the best tour on this run*/
 		if (getBestCircuit().isEmpty()) {
 			setBestCircuit(ants.get(0).getTour());
 			setMinimumCost(ants.get(0).getCostOfTour(dist));
@@ -65,6 +71,7 @@ public class AntColonyTSP extends AbstractTSP {
         }
 	}
 
+	/* The global best and update the global best tour's pheromone trails.*/
 	private void updatePheromones(double[][] tau) {
 		List<Integer> globalBestTour = getBestCircuit();
 		double globalBestAntContribution = 1.0 / getCostOfTour(globalBestTour);
@@ -78,10 +85,10 @@ public class AntColonyTSP extends AbstractTSP {
 
 	private double[][] initializePheromones(int noOfCities) {
 		double [][] tau = new double[noOfCities][noOfCities];
-		
+		/* tau[i][j] represented the pheromone quantity on the path from node i to node j*/
 		for (int i = 0; i < noOfCities; i++) {
 			for (int j = 0; j < noOfCities; j++) {
-				tau[i][j] = INITIAL_PHEROMONE_FOR_EACH_EDGE;
+				tau[i][j] = INITIAL_PHEROMONE_FOR_EACH_EDGE; /* it is initially 1*/
 			}
 		}
 		
@@ -104,7 +111,7 @@ public class AntColonyTSP extends AbstractTSP {
 				Integer currentCity = ant.getCurrentCity();
 				ant.visitCity(nextCity);
 				
-				tau[currentCity][nextCity] = (1 - ZETA) * tau[currentCity][nextCity] + ZETA * TAU0;
+				tau[currentCity][nextCity] = (1 - ZETA) * tau[currentCity][nextCity] + ZETA * TAU0; /* Local update of the pheromone trail. Specific to ACS only.*/
 			}
 		}
 	}
@@ -128,6 +135,7 @@ public class AntColonyTSP extends AbstractTSP {
 	}
 	
 	public int getMaximalCity(Ant ant, int noOfCities, double[][] tau) {
+		/* Return the best with the best ratio between dist heuristic and pheromone.*/
 		double maxValue = Double.MIN_VALUE;
 		int maximalCity = -1;
 		
@@ -151,6 +159,8 @@ public class AntColonyTSP extends AbstractTSP {
 	}
 	
 	public double[] calculateProbabilities(Ant ant, int noOfCities, double[][] tau) {
+		/* Computes the probabilities of going to the allowed cities. */
+		
 		double[] probabilities = new double[noOfCities];
         
 		int i = ant.getCurrentCity();
@@ -201,11 +211,12 @@ class Ant {
 	}
 
 	public void visitCity(int city) {
-		tour.add(city);
-		visitedCities.add(city);
+		tour.add(city); /* Keep all cities in an ordered list */
+		visitedCities.add(city); /* Add current city to the visited set*/
 	}
 	
 	public void reset() {
+		/* Reset the visited cities. Will be done at the beginning of every iteration.*/
 		visitedCities = new HashSet<>();
 		tour = new ArrayList<>();
 	}
