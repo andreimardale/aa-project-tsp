@@ -43,10 +43,9 @@ public class GreedyTSP extends AbstractTSP {
             notVisited.remove(notVisited.indexOf(bestCity));
             cost += shortestPath;
             }
-
-            getBestCircuit().add(startCity);
             cost += DISTANCES[currentCity][startCity];
             setMinimumCost(cost);
+            setBestCircuit(getBestCircuit());
     }
 
 

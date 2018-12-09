@@ -34,10 +34,11 @@ public class GeneticProgrammingTSP extends AbstractTSP {
 
 		/*
 		 * we evovle the population to a limit in order to get new generations with
-		 * better fittness*/
+		 * better fittness
+		 */
 		for (int i = 0; i < iterationSize; i++) {
 			pop = evolvePopulation(pop, crossOverType);
-			
+
 			Tour fittest_tour = pop.getFittest();
 //			System.out.println(fittest_tour.getDistance()+"\t"+fittest_tour);
 			setBestCircuit(fittest_tour.cities);
@@ -70,6 +71,9 @@ public class GeneticProgrammingTSP extends AbstractTSP {
 			Tour parent_1 = population.getFittest();
 			Tour parent_2 = getSecondParent(population);
 			/*
+			 * tournament can be used also where a tournament of specified size could be
+			 * used to get the best two parents for mating
+			 * 
 			 * while(true) { parent_2 = tournament(population);
 			 * if(!parent_1.equals(parent_2)) { break; } }
 			 */
@@ -94,7 +98,7 @@ public class GeneticProgrammingTSP extends AbstractTSP {
 				break;
 			}
 			}
-			
+
 			child.distance = child.getDistance();
 			/* add the new child to the new population */
 			newPopulation.tours.add(child);
@@ -109,25 +113,30 @@ public class GeneticProgrammingTSP extends AbstractTSP {
 	}
 
 	/*
-	 * this function given a tour it mutate its genes which are the cities by
-	 * swaping them
+	 * this function gets the second fittest child for crossover if tournament is
+	 * not used
 	 */
 	private Tour getSecondParent(Population pop) {
 		int first = Integer.MAX_VALUE;
 		int second = Integer.MAX_VALUE;
 		int index_of_p2 = 0;
 		for (int j = 0; j < popSize; j++) {
-			if(pop.tours.get(j).getDistance()<=first) {
-				second  = first;
-				first = (int)pop.tours.get(j).getDistance();
-			} else if(pop.tours.get(j).getDistance()<second && pop.tours.get(j).getDistance() != first) {
-				second = (int)pop.tours.get(j).getDistance();
+			if (pop.tours.get(j).getDistance() <= first) {
+				second = first;
+				first = (int) pop.tours.get(j).getDistance();
+			} else if (pop.tours.get(j).getDistance() < second && pop.tours.get(j).getDistance() != first) {
+				second = (int) pop.tours.get(j).getDistance();
 				index_of_p2 = j;
 			}
 		}
 		return pop.tours.get(index_of_p2);
-		
+
 	}
+
+	/*
+	 * this function given a tour it mutate its genes which are the cities by
+	 * swaping them
+	 */
 	private void mutate(Tour tour) {
 		for (int i = 0; i < tour.cities.size(); i++) {
 
@@ -151,6 +160,8 @@ public class GeneticProgrammingTSP extends AbstractTSP {
 
 	private Tour crossOver_PMX(Tour parent_1, Tour parent_2) {
 		Tour child = new Tour();
+
+		// generate random start and end indexes
 		int startIndex = (int) (Math.random() * parent_1.cities.size());
 		int endIndex = (int) (Math.random() * parent_1.cities.size());
 		while (startIndex == endIndex) {
@@ -163,22 +174,32 @@ public class GeneticProgrammingTSP extends AbstractTSP {
 		}
 		ArrayList<Integer> segment1 = new ArrayList<>();
 		ArrayList<Integer> segment2 = new ArrayList<>();
+
 		for (int i = startIndex; i <= endIndex; i++) {
 
+			/* save the segments truncated */
 			segment1.add(parent_1.cities.get(i));
 			segment2.add(parent_2.cities.get(i));
 
+			/* put the cities of parent2 in child within the segment */
 			child.cities.set(i, parent_2.cities.get(i));
 
+			/*
+			 * get the desired city and go search for its index in the cities of the first
+			 * parent then put the city facing it from parent1 in the city index fetched
+			 * before
+			 */
 			int desiredCity = parent_2.cities.get(i);
 			int cityIndex = getIndexOfCity(parent_1.cities, desiredCity);
 			child.cities.set(cityIndex, parent_1.cities.get(i));
 
 		}
+		/* put the remaining cities from parent 1 outside the segment */
 		for (int i = 0; i < child.cities.size(); i++) {
 			if ((i < startIndex) || (i > endIndex))
 				child.cities.set(i, parent_1.cities.get(i));
 		}
+		/* check for duplicates and remove them */
 		for (int i = 0; i < child.cities.size(); i++) {
 			while (checkDuplicates(child.cities, i)) {
 				removeDuplicates(child.cities, i, segment1, segment2);
@@ -267,105 +288,96 @@ public class GeneticProgrammingTSP extends AbstractTSP {
 			child2.cities.set(i, parent_2.cities.get(i));
 
 		}
-		
+		/* save the partitions */
 		for (int i = startIndex; i <= endIndex; i++) {
 
 			partition_1.add(parent_1.cities.get(i));
 			partition_2.add(parent_2.cities.get(i));
-		
+
 		}
+		/*
+		 * make holes or nulls in each of the parents according to the cities from the
+		 * second parent within the interval
+		 */
 		for (int i = 0; i < partition_1.size(); i++) {
 
 			makeHole(child1.cities, partition_2.get(i));
 			makeHole(child2.cities, partition_1.get(i));
 
 		}
+		/*shift the holes to the middle of the interval*/
+		shiftCities(child1, startIndex, endIndex);
+		shiftCities(child2, startIndex, endIndex);
 
-		shiftCities(child1, startIndex,endIndex);
-		shiftCities(child2, startIndex,endIndex);
-		
+		/* now switch the two segments between parents */
 		int index = startIndex;
 		for (int i = 0; i < partition_1.size(); i++) {
-			child1.cities.set(index,partition_2.get(i));
-			child2.cities.set(index,partition_1.get(i));
+			child1.cities.set(index, partition_2.get(i));
+			child2.cities.set(index, partition_1.get(i));
 			index++;
 		}
-		
+		/* return the best generated child */
 		if (child1.getDistance() < child2.getDistance()) {
 			return child1;
 		} else {
 			return child2;
 		}
 	}
-
-	private boolean checkPlaceAtLeft(ArrayList<Integer> cities, int startIndex) 
-	{
-		for (int i = 0; i < startIndex; i++) 
-		{
-			if(cities.get(i)==null)
-				{
-					return true;
-				}
+	/*function used by the shifting holes function */
+	private boolean checkPlaceAtLeft(ArrayList<Integer> cities, int startIndex) {
+		for (int i = 0; i < startIndex; i++) {
+			if (cities.get(i) == null) {
+				return true;
+			}
 		}
 		return false;
 	}
+	/*function used by the shifting holes function */
 	private boolean checkPlaceAtRight(ArrayList<Integer> cities, int endIndex) {
-		for (int i = endIndex+1; i < cities.size(); i++) {
-			if(cities.get(i)==null)
+		for (int i = endIndex + 1; i < cities.size(); i++) {
+			if (cities.get(i) == null)
 				return true;
 		}
 		return false;
 	}
-	private void shiftCities(Tour child1,int startIndex,int endIndex) {
-		for(int i=0;i<child1.cities.size();i++) 
-		{
-			if(child1.cities.get(i)==null)
-			{
-				if (checkPlaceAtLeft(child1.cities, startIndex)) 
-				{
-					for (int j = i; j < child1.cities.size(); j++)
-					{
-						if (child1.cities.get(j) != null) 
-						{
+
+	private void shiftCities(Tour child1, int startIndex, int endIndex) {
+		for (int i = 0; i < child1.cities.size(); i++) {
+			if (child1.cities.get(i) == null) {
+				if (checkPlaceAtLeft(child1.cities, startIndex)) {
+					for (int j = i; j < child1.cities.size(); j++) {
+						if (child1.cities.get(j) != null) {
 							child1.cities.set(i, child1.cities.get(j));
 							child1.cities.set(j, null);
 							break;
 						}
 					}
-				}
-				else
-				{
+				} else {
 					break;
 				}
 			}
-			
+
 		}
-			
-		for(int i=child1.cities.size()-1;i>=0;i--)
-		{
-			if(child1.cities.get(i)==null) 
-			{
-				if (checkPlaceAtRight(child1.cities, endIndex)) 
-				{
-					for (int j = i; j >= 0; j--) 
-					{
-						if (child1.cities.get(j) != null) 
-						{
+
+		for (int i = child1.cities.size() - 1; i >= 0; i--) {
+			if (child1.cities.get(i) == null) {
+				if (checkPlaceAtRight(child1.cities, endIndex)) {
+					for (int j = i; j >= 0; j--) {
+						if (child1.cities.get(j) != null) {
 							child1.cities.set(i, child1.cities.get(j));
 							child1.cities.set(j, null);
 							break;
 						}
 					}
-				}
-				else
+				} else
 					break;
 			}
 		}
 	}
-
+	/* make hole (null) in the desired place of the city */
 	private void makeHole(ArrayList<Integer> cities, int city) {
 		for (int i = 0; i < cities.size(); i++) {
-			if (cities.get(i)!=null && cities.get(i) == city) {
+			if (cities.get(i) != null && cities.get(i) == city) {
 				cities.set(i, null);
 				break;
 			}
@@ -385,7 +397,7 @@ public class GeneticProgrammingTSP extends AbstractTSP {
 		while (startIndex == endIndex) {
 			endIndex = (int) (Math.random() * parent_1.cities.size());
 		}
-		
+
 		/* fill child with cities from first parent */
 		for (int i = 0; i < child.cities.size(); i++) {
 

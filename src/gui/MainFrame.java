@@ -108,6 +108,10 @@ public class MainFrame extends javax.swing.JFrame {
 					break;
 				}
 			}
+			case "N-Greedy" :{
+				driver = new AlgorithmDriver(new NGreedy(), this.frame);
+				break;
+			}
 			}
 			if (inputFileName.equals("")) {
 				JOptionPane.showMessageDialog(null, "Please choose a file", "Input Alert", JOptionPane.ERROR_MESSAGE);
@@ -159,7 +163,7 @@ public class MainFrame extends javax.swing.JFrame {
 	/**
 	 * Creates new form MainFrame
 	 */
-	public String inputFileName = "hm10.tsp";
+	public String inputFileName ="";
 	public String algorithmName = "";
 
 	public MainFrame() {
@@ -490,7 +494,7 @@ public class MainFrame extends javax.swing.JFrame {
 		alogrithms_combo_box.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
 		alogrithms_combo_box.setModel(new javax.swing.DefaultComboBoxModel<>(
 				new String[] { "Brute Force", "Branch and Bound", "Cutting and Removing Edges", "Dynamic Programming",
-						"Minimum Spanning Tree", "Greedy", "Randomized", "Genetic Programming", "Ant Colony" }));
+						"Minimum Spanning Tree", "Greedy", "Randomized", "Genetic Programming", "Ant Colony" ,"N-Greedy" }));
 		alogrithms_combo_box.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				alogrithms_combo_boxActionPerformed(evt);
@@ -818,7 +822,8 @@ public class MainFrame extends javax.swing.JFrame {
 	}// GEN-LAST:event_combo_cross_over_typeActionPerformed
 
 	private void Reset_Graph_BtnActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_Reset_Graph_BtnActionPerformed
-		algorithmThread.clearGraph();
+		if(algorithmThread != null)
+			algorithmThread.clearGraph();
 	}// GEN-LAST:event_Reset_Graph_BtnActionPerformed
 
 	private void alogrithms_combo_boxActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_alogrithms_combo_boxActionPerformed
@@ -837,7 +842,9 @@ public class MainFrame extends javax.swing.JFrame {
 	}// GEN-LAST:event_alogrithms_combo_boxActionPerformed
 
 	private void Stop_Algo_btnActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_Stop_Algo_btnActionPerformed
-		algorithmThread.stop();
+		if (algorithmThread != null) {
+			algorithmThread.stop();
+		}
 	}// GEN-LAST:event_Stop_Algo_btnActionPerformed
 
 	private void browse_input_btnActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_browse_input_btnActionPerformed

@@ -62,9 +62,10 @@ public class RandomTSP extends AbstractTSP{
             notVisited.remove(notVisited.indexOf(destinationCity));
         }
 
-        getBestCircuit().add(firstCity);
+        //getBestCircuit().add(firstCity);
         cost += DISTANCES[currentCity][firstCity];
         setMinimumCost(cost);
+        setBestCircuit(getBestCircuit());
     }
 
     public void execute(TSPInput tspInput){

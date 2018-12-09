@@ -24,12 +24,14 @@ import utils.TSPReader;
  */
 public class MinimumSpanningTreeTSP extends AbstractTSP {
 
+	// class used for disjoint sets 
     private class Subset {
 
         int parent;
         int rank;
     }
 
+    // node structure in our minimum spanning tree
     private class Node {
 
         int index;
@@ -39,7 +41,7 @@ public class MinimumSpanningTreeTSP extends AbstractTSP {
             this.index = index;
             children = new ArrayList<>();
         }
-
+        // each node has an arraylist of children which we will add to it when building the tree
         public void add_child(Node child) {
             children.add(child);
         }
@@ -48,7 +50,7 @@ public class MinimumSpanningTreeTSP extends AbstractTSP {
         public String toString() {
             return index + "";
         }
-
+        // used when comparing objects 
         @Override
         public int hashCode() {
             final int prime = 31;
@@ -56,7 +58,7 @@ public class MinimumSpanningTreeTSP extends AbstractTSP {
             result = prime * result + index;
             return result;
         }
-
+     // used when comparing objects 
         @Override
         public boolean equals(Object obj) {
             if (this == obj) {
@@ -76,7 +78,7 @@ public class MinimumSpanningTreeTSP extends AbstractTSP {
         }
 
     }
-
+    // Edge class defining an edge in the tree which connects to nodes
     private class Edge {
 
         Node start;
@@ -102,18 +104,24 @@ public class MinimumSpanningTreeTSP extends AbstractTSP {
         int[][] adj_matrix = input.getDist();
         ArrayList<Edge> edges = new ArrayList<>();
         ArrayList<Node> nodes = init_nodes(input.getDimension());
+        
+        //initialize the edges in the graph
         for (int i = 0; i < adj_matrix.length; i++) {
             for (int j = i + 1; j < adj_matrix.length; j++) {
                 edges.add(new Edge(nodes.get(i), nodes.get(j), adj_matrix[i][j]));
             }
         }
+        //sort the edges in ascending order
         Collections.sort(edges, new Comparator<Edge>() {
             @Override
             public int compare(Edge t, Edge t1) {
                 return t.weight - t1.weight;
             }
         });
+        // temporary arraylist 
         initTemporary(input);
+        
+        
         preorder(build_tree(getMST(edges,input.getDimension())), input);
         calculate_route_cost(input);
     }
