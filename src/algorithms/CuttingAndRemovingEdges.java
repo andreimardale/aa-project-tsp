@@ -407,13 +407,6 @@ public class CuttingAndRemovingEdges extends AbstractTSP
             matrix[i][i]=Integer.MAX_VALUE;
         }
     }
-    public void printArray(int array[]) 
-    {
-        for (int i = 0; i < array.length; i++) 
-        {
-            System.out.print("" + array[i]+ "  ");
-        }
-    }
     
     //find to work on disjoint sets
     public int find(int number,Subset [] subsets)
@@ -535,22 +528,6 @@ class TreeNode
         this.rightNode = rightNode;
     }
     
-    
-    public void printArray(int array[]) 
-    {
-        for (int i = 0; i < array.length; i++) 
-        {
-            System.out.print(array[i]+"  ");
-        }
-    }
-    
-    public void printArrayList(ArrayList<Edge> array) 
-    {
-        for (int i = 0; i < array.size(); i++) 
-        {
-            System.out.print(array.get(i)+"  ");
-        }
-    }
 }
 
 //class to represent an edge
