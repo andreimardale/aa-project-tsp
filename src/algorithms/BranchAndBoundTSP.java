@@ -23,11 +23,9 @@ public class BranchAndBoundTSP extends AbstractTSP {
 
 
     public void branchAndBound(TreeNodeInBranchAndBound node) {
-        //System.out.println(node.toString());
         if (node.getCostFunction() < getMinimumCost()) 
         {
             TreeNodeInBranchAndBound child;
-            //System.out.println("First minimum cost: "+minimumCost);
             if (node.getCities().length < adjacencyMatrix.length) {
                 for (int i = 0; i < adjacencyMatrix.length; i++) 
                 {
@@ -47,7 +45,7 @@ public class BranchAndBoundTSP extends AbstractTSP {
                     branchAndBound(node.getChilds().get(i));
                 }
             } 
-            else if (node.getCities().length == adjacencyMatrix.length) //there is 1 step to reach the leaf
+            else if (node.getCities().length == adjacencyMatrix.length) //we are at the leaf
             {
                 int[] nodeCities = node.getCities();
                 int instantCost = node.getInstantCost() + adjacencyMatrix[nodeCities[nodeCities.length - 1]][nodeCities[0]];
@@ -80,13 +78,6 @@ public class BranchAndBoundTSP extends AbstractTSP {
         return arrayList;
     }
 
-    public void printArray(int array[]) 
-    {
-        for (int i = 0; i < array.length; i++) 
-        {
-            System.out.print("" + array[i] + " ");
-        }
-    }
 
     public boolean isInArray(int[] array, int number) 
     {
@@ -99,18 +90,6 @@ public class BranchAndBoundTSP extends AbstractTSP {
         }
         return false;
     } 
-
-    public void printMatrix(int[][] matrix) 
-    {
-        for (int i = 0; i < matrix.length; i++) 
-        {
-            for (int j = 0; j < matrix[0].length; j++) 
-            {
-                System.out.print(matrix[i][j]+" ");
-            }
-            System.out.println();
-        }
-    }
 
     private int getPredictedCost(int[] cities) 
     {
