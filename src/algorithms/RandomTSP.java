@@ -14,12 +14,11 @@ public class RandomTSP extends AbstractTSP{
 
     private void randomStrat (){
 
+        // Variables to save data
         int destinationCity = 0;
         int cost = 0;
         int index = 0;
-
         List<Integer> notVisited = new ArrayList<>(cityIndexes);
-
         int size = cityIndexes.size();
         int currentCity = ThreadLocalRandom.current().nextInt(0, size);;
         int firstCity = currentCity;
@@ -27,6 +26,7 @@ public class RandomTSP extends AbstractTSP{
         notVisited.remove(currentCity);
 
 
+        // Iterate i times | i = number of nodes
         for(int i = 0; i < size - 1; i ++) {
 
             double totalCost = 0.0;
@@ -55,6 +55,7 @@ public class RandomTSP extends AbstractTSP{
                 }
             }
 
+            // Add path to cost and city to circuit
             destinationCity = notVisited.get(index);
             cost += DISTANCES[currentCity][destinationCity];
             currentCity = destinationCity;
