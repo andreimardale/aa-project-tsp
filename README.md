@@ -1,5 +1,5 @@
 #Starting the Application
-- Navigate to the folder application folder. (/bin)
+- Navigate to the application folder. (/bin)
 - Type "java main.Main"
 
 #Running an Algorithm
@@ -22,3 +22,6 @@
 - Complete the required parameters.
 - Press <b>Generate</b> button.
 - The output is show in the panel and the file has been generated!
+
+#Github Repo
+https://github.com/andreimardale/aa-project-tsp
