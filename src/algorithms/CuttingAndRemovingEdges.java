@@ -476,7 +476,6 @@ public class CuttingAndRemovingEdges extends AbstractTSP
             }
         }
         tour.remove(tour.size()-1);
-        System.out.println(tour);
         return tour;
     }
 }
