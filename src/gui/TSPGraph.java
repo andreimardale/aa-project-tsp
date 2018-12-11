@@ -22,46 +22,48 @@ import model.Point;
 public class TSPGraph extends javax.swing.JPanel {
 
      public ArrayList<Integer> tour;
-    //private Timer timer;
-
+       
     public TSPGraph() {
     }
      
     public TSPGraph(ArrayList<Integer> tour) {
         this.tour = tour;
-        //timer = new Timer(5,this);
-        //timer.start();
+
     }
+
     public void setNewTour(ArrayList<Integer> initialTour){
         tour = initialTour;
         repaint();
     }
-
     @Override
     public void paint(Graphics g) {
-        super.paintComponent(g); //To change body of generated methods, choose Tools | Templates.
+        super.paintComponent(g);
+        
+        try {
+        	if (tour != null) {
+                ArrayList<Point> points = new ArrayList<>();
+                ArrayList<Integer> curr_tour = new ArrayList<>(tour);
+                curr_tour.add(curr_tour.get(0));
+                int numberOfPoints =  curr_tour.size() - 1;
+                int n = 300, x, y;
+                for (int i = 0; i < numberOfPoints; i++) {
+                    x = (getWidth() / 2) + (int) (n * Math.cos(2 * i * (Math.PI / numberOfPoints)));
+                    y = (getHeight() / 2) - (int) (n * Math.sin(2 * i * (Math.PI / numberOfPoints)));
+                    points.add(new Point(x, y, i));
+                    g.fillOval(x - 7, y - 7, 15, 15);
+                    g.drawString(i + "", x + 10, y + 10);
+                }
+                for (int i = 0; i < curr_tour.size() -1 ;i++) {
+    				if (curr_tour.get(i) != null && curr_tour.get(i + 1) != null) {
+    					Point city1 = points.get(curr_tour.get(i));
+    					Point city2 = points.get(curr_tour.get(i + 1));
+    					g.drawLine((int) city1.getX(), (int) city1.getY(), (int) city2.getX(), (int) city2.getY());
+    				}
+                }
+            }
+        } catch (Exception e) {}
         
         
-        if (tour != null) {
-            ArrayList<Point> points = new ArrayList<>();
-            tour.add(tour.get(0));
-            int numberOfPoints = tour.size() - 1;
-            int n = 300, x, y;
-            for (int i = 0; i < numberOfPoints; i++) {
-                x = (getWidth() / 2) + (int) (n * Math.cos(2 * i * (Math.PI / numberOfPoints)));
-                y = (getHeight() / 2) - (int) (n * Math.sin(2 * i * (Math.PI / numberOfPoints)));
-                points.add(new Point(x, y, i));
-                g.fillOval(x - 7, y - 7, 15, 15);
-                g.drawString(i + "", x + 10, y + 10);
-            }
-            for (int i = 0; i < tour.size() - 1; i++) {
-				if (tour.get(i) != null && tour.get(i + 1) != null) {
-					Point city1 = points.get(tour.get(i));
-					Point city2 = points.get(tour.get(i + 1));
-					g.drawLine((int) city1.getX(), (int) city1.getY(), (int) city2.getX(), (int) city2.getY());
-				}
-            }
-        }
         
     
     }
