@@ -59,6 +59,9 @@ public class BranchAndBoundTSP extends AbstractTSP {
             } 
             else //number of cities in the array is more than the number of cities (leaf of the tree)
             {
+                int []array=new int[node.getCities().length-1];
+                System.arraycopy(node.getCities(), 0, array, 0, node.getCities().length-1);
+                node.setCities(array);
                 if (node.getCostFunction() < getMinimumCost()) 
                 {
                 	setMinimumCost(node.getCostFunction());
@@ -205,6 +208,11 @@ class TreeNodeInBranchAndBound {
 
     public int [] getCities() {
         return cities;
+    }
+    
+    public void setCities(int [] cities)
+    {
+        this.cities=cities;
     }
 
     public ArrayList<TreeNodeInBranchAndBound> getChilds() {
