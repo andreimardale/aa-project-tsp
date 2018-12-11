@@ -40,13 +40,10 @@ public class GeneticProgrammingTSP extends AbstractTSP {
 			pop = evolvePopulation(pop, crossOverType);
 
 			Tour fittest_tour = pop.getFittest();
-//			System.out.println(fittest_tour.getDistance()+"\t"+fittest_tour);
-			setBestCircuit(fittest_tour.cities);
+			setBestCircuit(new ArrayList<>(fittest_tour.cities));
 			setMinimumCost((int) fittest_tour.getDistance());
 		}
-		Tour fittest_tour = pop.getFittest();
-		setMinimumCost((int) fittest_tour.getDistance());
-		setBestCircuit(pop.getFittest().cities);
+		
 	}
 
 	boolean keep = true;
@@ -68,8 +65,8 @@ public class GeneticProgrammingTSP extends AbstractTSP {
 		for (int i = offset; i < newPopulation.getSize(); i++) {
 			/* get the two parents using the tournament function */
 
-			Tour parent_1 = population.getFittest();
-			Tour parent_2 = getSecondParent(population);
+			Tour parent_1 = tournament(population);
+			Tour parent_2 = tournament(population);
 			/*
 			 * tournament can be used also where a tournament of specified size could be
 			 * used to get the best two parents for mating
